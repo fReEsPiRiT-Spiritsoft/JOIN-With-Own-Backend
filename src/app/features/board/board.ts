@@ -1,9 +1,26 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import {
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray,
+  transferArrayItem,
+} from '@angular/cdk/drag-drop';
 import { BoardTasksService } from '../../core/services/board-tasks-service';
 import { Task } from '../../core/interfaces/board-tasks-interface';
 
+/**
+ * Board Component - Haupt-Component für das Kanban-Board
+ *
+ * Diese Component ist der zentrale Container für die Board-Ansicht.
+ * Sie verwaltet alle Tasks und deren Verteilung auf die verschiedenen Spalten (Todo, In Progress, Await Feedback, Done).
+ *
+ * Hauptaufgaben:
+ * - Laden aller Tasks aus dem Service
+ * - Verwaltung der Task-Arrays für jede Spalte
+ * - Koordination des gesamten Board-Layouts (Header + Columns)
+ * - Bereitstellung der Drag & Drop Funktionalität
+ */
 @Component({
   selector: 'app-board',
   imports: [CommonModule, DragDropModule],
@@ -42,5 +59,4 @@ export class Board implements OnInit {
       },
     });
   }
-
 }
