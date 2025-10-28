@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, Output, OnInit, inject, HostListener } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnInit,
+  inject,
+  HostListener,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Task, Subtask } from '../../../core/interfaces/board-tasks-interface';
@@ -24,12 +34,14 @@ export class TaskModal implements OnInit {
   title = '';
   description = '';
   dueDate = '';
+  hiddenDateValue = '';
   priority: 'urgent' | 'medium' | 'low' = 'medium';
   category = '';
   selectedContactIds: string[] = [];
   subtasks: Subtask[] = [];
   newSubtaskTitle = '';
   editingSubtaskId: string | null = null;
+  subtaskInputFocused = false;
 
   showCategoryDropdown = false;
   showContactDropdown = false;
@@ -41,6 +53,8 @@ export class TaskModal implements OnInit {
   titleError = false;
   dueDateError = false;
   categoryError = false;
+
+  @ViewChild('datePicker') datePicker!: ElementRef<HTMLInputElement>;
 
   async ngOnInit() {
     await this.loadContacts();
@@ -106,7 +120,22 @@ export class TaskModal implements OnInit {
         completed: false,
       });
       this.newSubtaskTitle = '';
+      this.subtaskInputFocused = false;
     }
+  }
+
+  clearSubtaskInput() {
+    this.newSubtaskTitle = '';
+    this.subtaskInputFocused = false;
+  }
+
+  onSubtaskInputBlur() {
+    // Verzögerung, damit der Click auf den Button noch registriert wird
+    setTimeout(() => {
+      if (!this.newSubtaskTitle) {
+        this.subtaskInputFocused = false;
+      }
+    }, 200);
   }
 
   startEditSubtask(subtaskId: string) {
@@ -124,6 +153,34 @@ export class TaskModal implements OnInit {
     this.subtasks = this.subtasks.filter((s) => s.id !== subtaskId);
   }
 
+  formatDateInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, ''); // Entfernt alle Nicht-Zahlen
+
+    if (value.length >= 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2);
+    }
+    if (value.length >= 5) {
+      value = value.substring(0, 5) + '/' + value.substring(5, 9);
+    }
+
+    this.dueDate = value;
+  }
+
+  openDatePicker() {
+    this.datePicker.nativeElement.showPicker();
+  }
+
+  onDatePickerChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const dateValue = input.value; // Format: yyyy-mm-dd
+
+    if (dateValue) {
+      const [year, month, day] = dateValue.split('-');
+      this.dueDate = `${day}/${month}/${year}`;
+    }
+  }
+
   getInitials(contact: Contact): string {
     if (!contact || !contact.firstname) return '';
     const nameParts = contact.firstname.trim().split(' ');
@@ -136,9 +193,22 @@ export class TaskModal implements OnInit {
   }
 
   colorPalette = [
-    '#FF7A00', '#9327FF', '#6E52FF', '#FC71FF', '#FFBB2B', '#1FD7C1',
-    '#462F8A', '#FF4646', '#00BEE8', '#FF5EB3', '#FF745E', '#FFA35E',
-    '#FFC701', '#0038FF', '#C3FF2B', '#FFE62B',
+    '#FF7A00',
+    '#9327FF',
+    '#6E52FF',
+    '#FC71FF',
+    '#FFBB2B',
+    '#1FD7C1',
+    '#462F8A',
+    '#FF4646',
+    '#00BEE8',
+    '#FF5EB3',
+    '#FF745E',
+    '#FFA35E',
+    '#FFC701',
+    '#0038FF',
+    '#C3FF2B',
+    '#FFE62B',
   ];
 
   getAvatarColor(contact: Contact): string {
@@ -201,7 +271,6 @@ export class TaskModal implements OnInit {
       this.closeModal.emit();
     }, 2000);
   }
-
 
   resetForm() {
     this.title = '';
