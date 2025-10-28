@@ -34,6 +34,7 @@ export class Board implements OnInit {
   defaultStatus: 'todo' | 'inprogress' | 'awaitfeedback' | 'done' = 'todo';
   isLoading = true;
   searchQuery = '';
+  searchError = ''; 
 
   ngOnInit() {
     this.loadTasks();
@@ -63,30 +64,35 @@ export class Board implements OnInit {
   }
 
   updateDisplayedTasks() {
-    
     if (!this.searchQuery) {
       this.columns[0].tasks = this.allTasks.todo;
       this.columns[1].tasks = this.allTasks.inprogress;
       this.columns[2].tasks = this.allTasks.awaitfeedback;
       this.columns[3].tasks = this.allTasks.done;
+      this.searchError = '';  
     } else {
       this.columns[0].tasks = this.filterTasks(this.allTasks.todo);
       this.columns[1].tasks = this.filterTasks(this.allTasks.inprogress);
       this.columns[2].tasks = this.filterTasks(this.allTasks.awaitfeedback);
       this.columns[3].tasks = this.filterTasks(this.allTasks.done);
+      
+      const totalFound = this.columns[0].tasks.length + 
+                        this.columns[1].tasks.length + 
+                        this.columns[2].tasks.length + 
+                        this.columns[3].tasks.length;
+      
+      this.searchError = totalFound === 0 ? 'No tasks found' : '';
     }
   }
 
   filterTasks(tasks: Task[]): Task[] {
-    const filtered = tasks.filter(task => {
+    return tasks.filter(task => {
       const matchesTitle = task.title.toLowerCase().includes(this.searchQuery);
       const matchesDescription = task.description && 
                                  task.description.toLowerCase().includes(this.searchQuery);
       
       return matchesTitle || matchesDescription;
     });
-    
-    return filtered;
   }
 
   openAddTaskModal(status: string) {

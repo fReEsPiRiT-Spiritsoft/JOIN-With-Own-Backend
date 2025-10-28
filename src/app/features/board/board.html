@@ -1,5 +1,9 @@
 <div class="board-container">
-    <app-board-header (searchQuery)="onSearch($event)"></app-board-header>
+    <app-board-header 
+      [searchError]="searchError"
+      (addTaskClick)="openAddTaskModal('todo')"
+      (searchQuery)="onSearch($event)">
+    </app-board-header>
     
     <div class="board-columns-wrapper">
         @for (column of columns; track column.id) {
