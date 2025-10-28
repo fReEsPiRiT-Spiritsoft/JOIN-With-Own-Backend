@@ -85,7 +85,8 @@
 
 .assigned-users {
   display: flex;
-  gap: 4px;
+  align-items: flex-start;
+  height: 32px;
 
   .avatar {
     width: 32px;
@@ -97,7 +98,15 @@
     color: white;
     font-size: 12px;
     font-weight: 400;
-    border: 2px solid white;
+    font-family: 'Inter', sans-serif;
+    border: 1px solid white;
+    background: white;
+    flex-shrink: 0;
+    margin-left: -8px;
+
+    &:first-child {
+      margin-left: 0;
+    }
 
     &.more-users {
       background-color: #2a3647;
