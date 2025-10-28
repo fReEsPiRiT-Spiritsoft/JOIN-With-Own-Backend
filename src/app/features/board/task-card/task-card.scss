@@ -52,27 +52,38 @@
 
 .subtasks-progress {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 11px;
+  height: 16px;
 
   .progress-bar {
-    width: 100%;
+    flex: 1;
+    min-width: 128px;
     height: 8px;
     background-color: #f4f4f4;
-    border-radius: 4px;
+    border-radius: 8px;
     overflow: hidden;
 
     .progress-fill {
       height: 100%;
       background-color: #4589ff;
-      border-radius: 4px;
+      border-radius: 16px;
       transition: width 0.3s ease;
     }
   }
 
   .progress-text {
-    font-size: 12px;
-    color: #2a3647;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 120%;
+    color: #000000;
+    white-space: nowrap;
+    text-align: right;
+    flex-shrink: 0;
   }
 }
 
