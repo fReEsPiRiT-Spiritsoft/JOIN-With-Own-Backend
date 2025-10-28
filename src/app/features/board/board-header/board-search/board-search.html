@@ -1,6 +1,11 @@
 <div class="search-container">
-    <input type="text" class="search-input" placeholder="Find Task">
-    <button class="search-button">
-      <img src="assets/board/search-task.png" alt="Search">
-    </button>
-  </div>
+  <input 
+    type="text" 
+    class="search-input" 
+    placeholder="Find Task"
+    [(ngModel)]="searchValue"
+    (input)="onSearchInput()">
+  <button class="search-button">
+    <img src="assets/board/search-task.png" alt="Search">
+  </button>
+</div>

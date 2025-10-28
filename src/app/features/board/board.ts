@@ -16,6 +16,13 @@ import { BoardHeader } from './board-header/board-header';
 export class Board implements OnInit {
   private taskService = inject(BoardTasksService);
 
+  allTasks = {
+    todo: [] as Task[],
+    inprogress: [] as Task[],
+    awaitfeedback: [] as Task[],
+    done: [] as Task[]
+  };
+
   columns = [
     { id: 'todo', title: 'To do', tasks: [] as Task[] },
     { id: 'inprogress', title: 'In progress', tasks: [] as Task[] },
@@ -26,6 +33,7 @@ export class Board implements OnInit {
   showAddTaskModal = false;
   defaultStatus: 'todo' | 'inprogress' | 'awaitfeedback' | 'done' = 'todo';
   isLoading = true;
+  searchQuery = '';
 
   ngOnInit() {
     this.loadTasks();
@@ -35,34 +43,66 @@ export class Board implements OnInit {
     this.isLoading = true;
     this.taskService.getTasksByStatus().subscribe({
       next: (tasks) => {
-        this.columns[0].tasks = tasks.todo;
-        this.columns[1].tasks = tasks.inprogress;
-        this.columns[2].tasks = tasks.awaitfeedback;
-        this.columns[3].tasks = tasks.done;
+        this.allTasks.todo = tasks.todo;
+        this.allTasks.inprogress = tasks.inprogress;
+        this.allTasks.awaitfeedback = tasks.awaitfeedback;
+        this.allTasks.done = tasks.done;
+        
+        this.updateDisplayedTasks();
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading tasks:', error);
         this.isLoading = false;
       },
     });
   }
 
- openAddTaskModal(status: string) {
-  this.defaultStatus = status as 'todo' | 'inprogress' | 'awaitfeedback' | 'done';
-  this.showAddTaskModal = true;
-  console.log('Opening modal for status:', status);
-}
+  onSearch(query: string) {
+    this.searchQuery = query.toLowerCase().trim();
+    this.updateDisplayedTasks();
+  }
+
+  updateDisplayedTasks() {
+    
+    if (!this.searchQuery) {
+      this.columns[0].tasks = this.allTasks.todo;
+      this.columns[1].tasks = this.allTasks.inprogress;
+      this.columns[2].tasks = this.allTasks.awaitfeedback;
+      this.columns[3].tasks = this.allTasks.done;
+    } else {
+      this.columns[0].tasks = this.filterTasks(this.allTasks.todo);
+      this.columns[1].tasks = this.filterTasks(this.allTasks.inprogress);
+      this.columns[2].tasks = this.filterTasks(this.allTasks.awaitfeedback);
+      this.columns[3].tasks = this.filterTasks(this.allTasks.done);
+    }
+  }
+
+  filterTasks(tasks: Task[]): Task[] {
+    const filtered = tasks.filter(task => {
+      const matchesTitle = task.title.toLowerCase().includes(this.searchQuery);
+      const matchesDescription = task.description && 
+                                 task.description.toLowerCase().includes(this.searchQuery);
+      
+      return matchesTitle || matchesDescription;
+    });
+    
+    return filtered;
+  }
+
+  openAddTaskModal(status: string) {
+    this.defaultStatus = status as 'todo' | 'inprogress' | 'awaitfeedback' | 'done';
+    this.showAddTaskModal = true;
+  }
 
   closeAddTaskModal() {
     this.showAddTaskModal = false;
   }
-  
 
   async handleTaskCreated(task: Omit<Task, 'id' | 'createdAt'>) {
     try {
       await this.taskService.createTask(task);
       this.closeAddTaskModal();
+      this.loadTasks();
     } catch (error) {
       console.error('Error creating task:', error);
     }

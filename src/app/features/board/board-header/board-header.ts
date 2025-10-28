@@ -10,9 +10,9 @@ import { BoardSearch } from './board-search/board-search';
   standalone: true,
 })
 export class BoardHeader {
-  @Output() addTaskClicked = new EventEmitter<string>();
+  @Output() searchQuery = new EventEmitter<string>();
 
-  onAddTaskClick(status: string) {
-    this.addTaskClicked.emit(status);
+  onSearch(query: string) {
+    this.searchQuery.emit(query);
   }
 }
