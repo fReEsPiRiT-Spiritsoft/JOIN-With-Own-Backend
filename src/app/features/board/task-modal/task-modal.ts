@@ -252,7 +252,11 @@ export class TaskModal implements OnInit {
     if (!this.validateForm()) {
       return;
     }
-    const dueDateTimestamp = Timestamp.fromDate(new Date(this.dueDate));
+
+    const [day, month, year] = this.dueDate.split('/');
+    const dateObject = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    const dueDateTimestamp = Timestamp.fromDate(dateObject);
+
     const newTask: Omit<Task, 'id' | 'createdAt'> = {
       title: this.title.trim(),
       description: this.description.trim(),
