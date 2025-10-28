@@ -126,6 +126,7 @@ export class TaskCard implements OnInit, OnChanges {
   }
 
   onDeleteSubtask(subtask: any): void {
+    this.task.subtasks = this.task.subtasks.filter((s) => s.id !== subtask.id);
     this.subtaskDeleted.emit({ task: this.task, subtask });
   }
 
