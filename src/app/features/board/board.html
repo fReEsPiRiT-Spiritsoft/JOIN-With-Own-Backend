@@ -7,7 +7,8 @@
             [title]="column.title" 
             [tasks]="column.tasks" 
             [columnId]="column.id"
-            (addTaskClicked)="openAddTaskModal($event)">
+            (addTaskClicked)="openAddTaskModal($event)"
+            (taskClicked)="openViewTaskModal($event)">
         </app-board-columns>
         }
     </div>
@@ -17,4 +18,12 @@
         (closeModal)="closeAddTaskModal()" 
         (taskCreated)="handleTaskCreated($event)">
     </app-task-modal>
+
+     <app-show-task-modal 
+        [showModal]="showViewTaskModal" 
+        [task]="selectedTask"
+        (closeModal)="closeViewTaskModal()" 
+        (editTask)="handleEditTask($event)"
+        (deleteTask)="handleDeleteTask($event)">
+    </app-show-task-modal>
 </div>

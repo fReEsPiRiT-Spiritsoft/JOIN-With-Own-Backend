@@ -64,8 +64,17 @@ export class BoardTasksService {
    * Task aktualisieren
    */
   async updateTask(taskId: string, updates: Partial<Task>): Promise<void> {
-    const taskDoc = doc(this.firestore, 'tasks', taskId);
-    await updateDoc(taskDoc, updates);
+    const taskDoc = doc(this.firestore, `tasks/${taskId}`);
+    const updateData: any = { ...updates };
+    if (updates.assignedTo !== undefined) {
+      updateData.assignedTo = updates.assignedTo;
+    }
+    try {
+      await updateDoc(taskDoc, updateData);
+    } catch (error) {
+      console.error('Firestore update failed:', error);
+      throw error;
+    }
   }
 
   /**

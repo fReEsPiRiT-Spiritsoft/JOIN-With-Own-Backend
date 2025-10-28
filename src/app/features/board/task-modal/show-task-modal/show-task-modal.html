@@ -1,0 +1,88 @@
+@if (showModal && task) {
+<div class="modal-overlay" (click)="onOverlayClick()">
+  <div class="modal-container" (click)="onModalClick($event)">
+    <button class="close-btn" (click)="onClose()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M18 6L6 18M6 6L18 18" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+    <div class="category-badge" [ngClass]="task.category === 'User Story' ? 'user-story' : 'technical-task'">
+      {{ task.category }}
+    </div>
+    <h1 class="task-title">{{ task.title }}</h1>
+    <p class="task-description">{{ task.description }}</p>
+    <div class="info-row">
+      <span class="label">Due date:</span>
+      <span class="value">{{ formatDate(task.dueDate) }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Priority:</span>
+      <div class="priority-value">
+        <span>{{ getPriorityText() }}</span>
+        <span class="priority-icon" [style.color]="getPriorityColor()">
+          {{ getPriorityIcon() }}
+        </span>
+      </div>
+    </div>
+    <div class="assigned-section">
+      <span class="label">Assigned To:</span>
+      <div class="assigned-list">
+        @for (contact of assignedContacts; track contact.id) {
+        <div class="assigned-contact">
+          <div class="avatar" [style.background-color]="getAvatarColor(contact)">
+            {{ getInitials(contact) }}
+          </div>
+          <span class="contact-name">{{ contact.firstname }} {{ contact.lastname }}</span>
+        </div>
+        }
+      </div>
+    </div>
+    @if (task.subtasks && task.subtasks.length > 0) {
+    <div class="subtasks-section">
+      <span class="label">Subtasks</span>
+      <div class="subtasks-list">
+        @for (subtask of task.subtasks; track subtask.id) {
+        <div class="subtask-item" (click)="toggleSubtask(subtask.id)">
+          <div class="checkbox" [class.checked]="subtask.completed">
+            @if (subtask.completed) {
+            <svg width="14" height="11" viewBox="0 0 14 11" fill="none">
+              <path d="M1 5.5L5 9.5L13 1.5" stroke="white" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            }
+          </div>
+          <span class="subtask-title" [class.completed]="subtask.completed">{{ subtask.title }}</span>
+        </div>
+        }
+      </div>
+    </div>
+    }
+    <div class="modal-actions">
+      <button class="action-btn delete" (click)="onDelete()">
+        <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+          <path
+            d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM13 3H3V16H13V3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
+            fill="#2A3647" />
+        </svg>
+        Delete
+      </button>
+      <div class="divider"></div>
+      <button class="action-btn edit" (click)="onEdit()">
+        <svg width="19" height="19" viewBox="0 0 19 19" fill="none">
+          <path
+            d="M2 17H3.4L12.025 8.375L10.625 6.975L2 15.6V17ZM16.3 6.925L12.05 2.725L13.45 1.325C13.8333 0.941667 14.3043 0.75 14.863 0.75C15.421 0.75 15.8917 0.941667 16.275 1.325L17.675 2.725C18.0583 3.10833 18.2583 3.571 18.275 4.113C18.2917 4.65433 18.1083 5.11667 17.725 5.5L16.3 6.925ZM14.85 8.4L4.25 19H0V14.75L10.6 4.15L14.85 8.4Z"
+            fill="#2A3647" />
+        </svg>
+        Edit
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-edit-task-modal 
+  [showModal]="showEditModal" 
+  [task]="task"
+  (closeModal)="closeEditModal()" 
+  (taskUpdated)="handleTaskUpdated($event)">
+</app-edit-task-modal>
+}

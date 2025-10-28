@@ -11,6 +11,7 @@ export interface Task {
   assignedTo: string[]; 
   subtasks: Subtask[];
   createdAt: Timestamp;
+  updatedAt?: Timestamp;
 }
 
 export interface Subtask {

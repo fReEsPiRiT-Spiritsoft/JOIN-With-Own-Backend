@@ -15,8 +15,13 @@ export class BoardColumns {
   @Input() tasks: Task[] = [];
   @Input() columnId: string = '';
   @Output() addTaskClicked = new EventEmitter<string>();
+  @Output() taskClicked = new EventEmitter<Task>();
 
   onAddTaskClick() {
     this.addTaskClicked.emit(this.columnId);
+  }
+
+  onTaskClick(task: Task) {
+    this.taskClicked.emit(task);
   }
 }
