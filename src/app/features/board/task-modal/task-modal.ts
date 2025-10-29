@@ -35,6 +35,7 @@ export class TaskModal implements OnInit {
   description = '';
   dueDate = '';
   hiddenDateValue = '';
+  minDate = this.getTodayDateString();
   priority: 'urgent' | 'medium' | 'low' = 'medium';
   category = '';
   selectedContactIds: string[] = [];
@@ -54,6 +55,7 @@ export class TaskModal implements OnInit {
 
   titleError = false;
   dueDateError = false;
+  dueDateErrorMessage = 'This field is required';
   categoryError = false;
 
   @ViewChild('datePicker') datePicker!: ElementRef<HTMLInputElement>;
@@ -280,6 +282,14 @@ export class TaskModal implements OnInit {
     return this.colorPalette[index];
   }
 
+  getTodayDateString(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   validateForm(): boolean {
     let isValid = true;
 
@@ -292,9 +302,28 @@ export class TaskModal implements OnInit {
 
     if (!this.dueDate) {
       this.dueDateError = true;
+      this.dueDateErrorMessage = 'This field is required';
       isValid = false;
     } else {
-      this.dueDateError = false;
+      // Prüfe, ob das Datum in der Vergangenheit liegt
+      const [day, month, year] = this.dueDate.split('/');
+      if (day && month && year) {
+        const selectedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (selectedDate < today) {
+          this.dueDateError = true;
+          this.dueDateErrorMessage = 'Date cannot be in the past';
+          isValid = false;
+        } else {
+          this.dueDateError = false;
+        }
+      } else {
+        this.dueDateError = true;
+        this.dueDateErrorMessage = 'Invalid date format';
+        isValid = false;
+      }
     }
 
     if (!this.category) {
@@ -349,6 +378,7 @@ export class TaskModal implements OnInit {
     this.contactSearchTerm = 'Select contacts to assign';
     this.titleError = false;
     this.dueDateError = false;
+    this.dueDateErrorMessage = 'This field is required';
     this.categoryError = false;
     this.showCategoryDropdown = false;
     this.showContactDropdown = false;

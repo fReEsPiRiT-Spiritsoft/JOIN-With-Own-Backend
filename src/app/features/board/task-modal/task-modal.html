@@ -41,9 +41,9 @@
                     </svg>
                   </button>
                   <input type="date" class="hidden-date-picker" [(ngModel)]="hiddenDateValue" name="hiddenDate"
-                    (change)="onDatePickerChange($event)" #datePicker />
+                    (change)="onDatePickerChange($event)" [min]="minDate" #datePicker />
                 </div>
-                <span class="field-error" [class.visible]="dueDateError">This field is required</span>
+                <span class="field-error" [class.visible]="dueDateError">{{ dueDateErrorMessage }}</span>
               </div>
             </div>
           </div>
@@ -173,14 +173,31 @@
               @if (subtasks.length > 0) {
               <div class="subtasks-list">
                 @for (subtask of subtasks; track subtask.id) {
-                <div class="subtask-item">
+                <div class="subtask-item" [class.editing]="editingSubtaskId === subtask.id">
                   @if (editingSubtaskId === subtask.id) {
-                  <input type="text" #editInput [value]="subtask.title"
-                    (keyup.enter)="saveSubtask(subtask, editInput.value)" (blur)="saveSubtask(subtask, editInput.value)"
-                    class="edit-input" />
+                  <div class="subtask-edit-wrapper">
+                    <input type="text" #editInput [value]="subtask.title"
+                      (keyup.enter)="saveSubtask(subtask, editInput.value)" class="edit-input" />
+                    <div class="subtask-edit-actions">
+                      <button type="button" class="icon-btn small" (click)="deleteSubtask(subtask.id)">
+                        <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+                          <path
+                            d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM13 3H3V16H13V3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
+                            fill="#2A3647" />
+                        </svg>
+                      </button>
+                      <div class="divider-vertical"></div>
+                      <button type="button" class="icon-btn small" (click)="saveSubtask(subtask, editInput.value)">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                          <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" fill="#2A3647" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
                   } @else {
                   <span>• {{ subtask.title }}</span>
                   }
+                  @if (editingSubtaskId !== subtask.id) {
                   <div class="subtask-item-actions">
                     <button type="button" class="icon-btn small" (click)="startEditSubtask(subtask.id)">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -189,6 +206,7 @@
                           fill="#2A3647" />
                       </svg>
                     </button>
+                    <div class="divider-vertical"></div>
                     <button type="button" class="icon-btn small" (click)="deleteSubtask(subtask.id)">
                       <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
                         <path
@@ -197,6 +215,7 @@
                       </svg>
                     </button>
                   </div>
+                  }
                 </div>
                 }
               </div>
