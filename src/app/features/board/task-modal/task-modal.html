@@ -78,9 +78,11 @@
                   <input type="text" [(ngModel)]="contactSearchTerm" name="contactSearch"
                     placeholder="Select contacts to assign" (focus)="showContactDropdown = true"
                     (input)="onContactSearch()" autocomplete="off" />
-                  <img
+                  <img #contactArrow
                     [src]="showContactDropdown ? 'assets/board/arrow-drop-up-transparent.png' : 'assets/board/arrow-drop-down-transparent.png'"
-                    alt="dropdown arrow" class="dropdown-arrow" (click)="toggleContactDropdown()" />
+                    alt="dropdown arrow" class="dropdown-arrow" (click)="toggleContactDropdown()"
+                    (mouseenter)="onArrowHover(contactArrow, showContactDropdown)"
+                    (mouseleave)="onArrowLeave(contactArrow, showContactDropdown)" />
                 </div>
 
                 @if (showContactDropdown) {
@@ -125,9 +127,11 @@
               <div class="dropdown-wrapper">
                 <div class="dropdown-toggle" (click)="toggleCategoryDropdown()" [class.error]="categoryError">
                   <span>{{ category || 'Select task category' }}</span>
-                  <img
+                  <img #categoryArrow
                     [src]="showCategoryDropdown ? 'assets/board/arrow-drop-up-transparent.png' : 'assets/board/arrow-drop-down-transparent.png'"
-                    alt="dropdown arrow" class="dropdown-arrow" />
+                    alt="dropdown arrow" class="dropdown-arrow"
+                    (mouseenter)="onArrowHover(categoryArrow, showCategoryDropdown)"
+                    (mouseleave)="onArrowLeave(categoryArrow, showCategoryDropdown)" />
                 </div>
 
                 @if (showCategoryDropdown) {

@@ -360,4 +360,20 @@ export class TaskModal implements OnInit {
 
     event.stopPropagation();
   }
+
+  onArrowHover(imgElement: HTMLImageElement, isDropdownOpen: boolean) {
+    if (isDropdownOpen) {
+      imgElement.src = 'assets/arrow-up-variant2.png';
+    } else {
+      imgElement.src = 'assets/arrow-down-variant2.png';
+    }
+  }
+
+  onArrowLeave(imgElement: HTMLImageElement, isDropdownOpen: boolean) {
+    if (isDropdownOpen) {
+      imgElement.src = 'assets/board/arrow-drop-up-transparent.png';
+    } else {
+      imgElement.src = 'assets/board/arrow-drop-down-transparent.png';
+    }
+  }
 }
