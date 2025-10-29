@@ -9,8 +9,8 @@
 
     <div class="form-group">
       <label>Title</label>
-      <input type="text" [(ngModel)]="title" name="title" placeholder="Enter a title"
-        [class.error]="titleError" (input)="titleError = false" />
+      <input type="text" [(ngModel)]="title" name="title" placeholder="Enter a title" [class.error]="titleError"
+        (input)="titleError = false" />
     </div>
 
     <div class="form-group">
@@ -44,8 +44,7 @@
           </svg>
         </button>
 
-        <button type="button" class="priority-btn low" [class.active]="priority === 'low'"
-          (click)="setPriority('low')">
+        <button type="button" class="priority-btn low" [class.active]="priority === 'low'" (click)="setPriority('low')">
           Low
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M8 14L2 4H14L8 14Z" [attr.fill]="priority === 'low' ? '#fff' : '#7AE229'" />
@@ -67,14 +66,17 @@
         @if (showContactDropdown) {
         <div class="dropdown-menu contacts-dropdown">
           @for (contact of contacts; track contact.id) {
-          <div class="contact-item" (click)="toggleContact(contact.id!)">
+          <div class="contact-item" [class.selected]="isContactSelected(contact.id!)"
+            (click)="toggleContact(contact.id!)">
             <div class="contact-info">
               <div class="avatar" [style.background-color]="getAvatarColor(contact)">
                 {{ getInitials(contact) }}
               </div>
               <span>{{ contact.firstname }}</span>
             </div>
-            <input type="checkbox" [checked]="isContactSelected(contact.id!)" (change)="$event.stopPropagation()" />
+            <img
+              [src]="isContactSelected(contact.id!) ? 'assets/check-box/checkbox-white.png' : 'assets/board/check-button.png'"
+              class="contact-checkbox" alt="checkbox">
           </div>
           }
         </div>
@@ -143,7 +145,7 @@
       </div>
       }
     </div>
-    
+
     <div class="modal-footer">
       <button type="button" class="btn-submit" (click)="onSubmit()">
         Ok ✓

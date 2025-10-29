@@ -84,15 +84,17 @@
                 @if (showContactDropdown) {
                 <div class="dropdown-menu contacts-dropdown">
                   @for (contact of contacts; track contact.id) {
-                  <div class="contact-item" (click)="toggleContact(contact.id!, $event)">
+                  <div class="contact-item" [class.selected]="isContactSelected(contact.id!)"
+                    (click)="toggleContact(contact.id!, $event)">
                     <div class="contact-info">
                       <div class="avatar" [style.background-color]="getAvatarColor(contact)">
                         {{ getInitials(contact) }}
                       </div>
                       <span>{{ contact.firstname }}</span>
                     </div>
-                    <input type="checkbox" [checked]="isContactSelected(contact.id!)" (change)="$event.stopPropagation()"
-                      readonly />
+                    <img
+                      [src]="isContactSelected(contact.id!) ? 'assets/check-box/checkbox-white.png' : 'assets/board/check-button.png'"
+                      class="contact-checkbox" alt="checkbox">
                   </div>
                   }
                 </div>

@@ -50,7 +50,7 @@
   }
 
   &:hover svg path {
-    stroke: #29ABE2;
+    stroke: #29abe2;
   }
 }
 
@@ -62,36 +62,36 @@
   label {
     font-size: 20px;
     font-weight: 700;
-    color: #2A3647;
+    color: #2a3647;
   }
 
-  input[type="text"],
-  input[type="date"],
+  input[type='text'],
+  input[type='date'],
   textarea {
     padding: 12px 21px;
-    border: 1px solid #D1D1D1;
+    border: 1px solid #d1d1d1;
     border-radius: 10px;
     font-size: 20px;
     font-family: 'Inter', sans-serif;
     color: #000000;
     transition: border-color 0.2s;
-    background: #FFFFFF;
+    background: #ffffff;
 
     &:focus {
       outline: none;
-      border-color: #29ABE2;
+      border-color: #29abe2;
     }
 
     &::placeholder {
-      color: #D1D1D1;
+      color: #d1d1d1;
     }
 
     &.error {
-      border-color: #FF8190;
+      border-color: #ff8190;
     }
   }
 
-  input[type="date"] {
+  input[type='date'] {
     cursor: pointer;
   }
 
@@ -110,12 +110,12 @@
 .priority-btn {
   flex: 1;
   padding: 14px;
-  background: #FFFFFF;
-  border: 1px solid #D1D1D1;
+  background: #ffffff;
+  border: 1px solid #d1d1d1;
   border-radius: 10px;
   font-size: 18px;
   font-weight: 400;
-  color: #2A3647;
+  color: #2a3647;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -124,23 +124,23 @@
   transition: all 0.2s;
 
   &:hover {
-    background: #F4F4F4;
+    background: #f4f4f4;
   }
 
   &.active {
-    background: #2A3647;
-    color: #FFFFFF;
-    border-color: #2A3647;
+    background: #2a3647;
+    color: #ffffff;
+    border-color: #2a3647;
   }
 
   &.medium.active {
-    background: #FFA800;
-    border-color: #FFA800;
+    background: #ffa800;
+    border-color: #ffa800;
   }
 
   &.low.active {
-    background: #7AE229;
-    border-color: #7AE229;
+    background: #7ae229;
+    border-color: #7ae229;
   }
 }
 
@@ -151,19 +151,19 @@
 
 .dropdown-toggle {
   padding: 12px 21px;
-  border: 1px solid #D1D1D1;
+  border: 1px solid #d1d1d1;
   border-radius: 10px;
   font-size: 20px;
-  color: #2A3647;
+  color: #2a3647;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
   transition: border-color 0.2s;
-  background: #FFFFFF;
+  background: #ffffff;
 
   &:hover {
-    border-color: #29ABE2;
+    border-color: #29abe2;
   }
 
   svg {
@@ -180,8 +180,8 @@
   // top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: #FFFFFF;
-  border: 1px solid #D1D1D1;
+  background: #ffffff;
+  border: 1px solid #d1d1d1;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   max-height: 200px;
@@ -192,21 +192,34 @@
 // Contacts Dropdown
 .contacts-dropdown {
   .contact-item {
-    padding: 8px 16px;
+    padding: 7px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
     transition: background-color 0.2s;
+    border-radius: 10px;
 
     &:hover {
-      background: #F4F4F4;
+      background: #eeeeee;
+    }
+
+    &.selected {
+      background: #2a3647;
+
+      &:hover {
+        background: #091931;
+      }
+
+      .contact-info span {
+        color: #ffffff;
+      }
     }
 
     .contact-info {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
 
       .avatar {
         width: 42px;
@@ -215,21 +228,29 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 14px;
-        color: #FFFFFF;
+        font-size: 12px;
+        color: #ffffff;
         font-weight: 400;
+        border: 2px solid #ffffff;
       }
 
       span {
         font-size: 20px;
-        color: #2A3647;
+        color: #2a3647;
+        transition: color 0.2s;
       }
     }
 
-    input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
+    .contact-checkbox {
+      width: 24px;
+      height: 24px;
       cursor: pointer;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
     }
   }
 }
@@ -248,9 +269,9 @@
     align-items: center;
     justify-content: center;
     font-size: 14px;
-    color: #FFFFFF;
+    color: #ffffff;
     font-weight: 400;
-    border: 2px solid #FFFFFF;
+    border: 2px solid #ffffff;
   }
 }
 
@@ -263,18 +284,18 @@
   input {
     flex: 1;
     padding: 12px 100px 12px 21px;
-    border: 1px solid #D1D1D1;
+    border: 1px solid #d1d1d1;
     border-radius: 10px;
     font-size: 20px;
     font-family: 'Inter', sans-serif;
 
     &:focus {
       outline: none;
-      border-color: #29ABE2;
+      border-color: #29abe2;
     }
 
     &::placeholder {
-      color: #D1D1D1;
+      color: #d1d1d1;
     }
   }
 
@@ -288,7 +309,7 @@
     .divider {
       width: 1px;
       height: 24px;
-      background: #D1D1D1;
+      background: #d1d1d1;
     }
 
     .icon-btn {
@@ -310,7 +331,7 @@
       }
 
       &:hover svg path {
-        stroke: #29ABE2;
+        stroke: #29abe2;
       }
     }
   }
@@ -328,15 +349,15 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
-  background: #F4F4F4;
+  background: #f4f4f4;
   border-radius: 8px;
   font-size: 16px;
-  color: #2A3647;
+  color: #2a3647;
 
   .edit-input {
     flex: 1;
     padding: 4px 8px;
-    border: 1px solid #29ABE2;
+    border: 1px solid #29abe2;
     border-radius: 4px;
     font-size: 16px;
   }
@@ -364,7 +385,7 @@
       }
 
       &:hover svg path {
-        fill: #29ABE2;
+        fill: #29abe2;
       }
     }
   }
@@ -380,8 +401,8 @@
 
 .btn-submit {
   padding: 14px 32px;
-  background: #2A3647;
-  color: #FFFFFF;
+  background: #2a3647;
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   font-size: 20px;
@@ -393,7 +414,7 @@
   gap: 8px;
 
   &:hover {
-    background: #29ABE2;
+    background: #29abe2;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
