@@ -120,7 +120,6 @@ form {
     align-items: flex-start;
     padding: 0px;
     width: 440px;
-    min-height: 100px;
   }
 
   label {
@@ -150,7 +149,6 @@ form {
     padding: 0px;
     gap: 4px;
     width: 440px;
-    height: 68px;
     flex: none;
     order: 1;
     align-self: stretch;
@@ -159,24 +157,26 @@ form {
 
   .field-error {
     width: 440px;
-    height: 16px;
+    min-height: 16px;
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 120%;
     color: #e60026;
     flex: none;
     order: 1;
     align-self: stretch;
     flex-grow: 0;
+    max-height: 0;
     opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
+    overflow: hidden;
+    transition: max-height 0.2s ease, opacity 0.2s ease, margin-top 0.2s ease;
 
     &.visible {
+      max-height: 20px;
       opacity: 1;
-      visibility: visible;
+      margin-top: 4px;
     }
   }
 
