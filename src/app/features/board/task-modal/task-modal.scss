@@ -94,7 +94,7 @@ form {
 .form-left {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 7px;
   width: 440px;
   flex-shrink: 0;
 }
@@ -102,23 +102,25 @@ form {
 .form-right {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 7px;
   width: 440px;
   flex-shrink: 0;
 }
 
 .form-group {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
   flex: none;
   align-self: stretch;
   flex-grow: 0;
+  padding-bottom: 20px; // Platz für Error Message (16px) + 4px gap
 
   // Nur für form-groups mit input-wrapper die spezifischen Layout-Properties
   &:has(.input-wrapper) {
     align-items: flex-start;
-    padding: 0px;
+    padding: 0px 0px 20px 0px;
     width: 440px;
   }
 
@@ -143,40 +145,37 @@ form {
   }
 
   .input-wrapper {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 0px;
-    gap: 4px;
     width: 440px;
     flex: none;
     order: 1;
     align-self: stretch;
     flex-grow: 0;
-  }
 
-  .field-error {
-    width: 440px;
-    min-height: 16px;
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 120%;
-    color: #e60026;
-    flex: none;
-    order: 1;
-    align-self: stretch;
-    flex-grow: 0;
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease, opacity 0.2s ease, margin-top 0.2s ease;
+    .field-error {
+      position: absolute;
+      bottom: -20px; // Positioniert unter dem input-wrapper
+      left: 0;
+      width: 440px;
+      height: 16px;
+      font-family: 'Inter', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 120%;
+      color: #e60026;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
 
-    &.visible {
-      max-height: 20px;
-      opacity: 1;
-      margin-top: 4px;
+      &.visible {
+        opacity: 1;
+        visibility: visible;
+      }
     }
   }
 
