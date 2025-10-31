@@ -1,0 +1,57 @@
+.frame-218 {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 20px;
+    font-weight: 400;
+    color: #2a3647;
+  }
+
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    input,
+    textarea {
+      padding: 13px 21px;
+      border: 1px solid #d1d1d1;
+      border-radius: 10px;
+      font-size: 20px;
+      font-family: inherit;
+      outline: none;
+
+      &:focus {
+        border-color: #29abe2;
+      }
+
+      &.error {
+        border-color: #ff3d00;
+      }
+
+      &::placeholder {
+        color: #d1d1d1;
+      }
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .field-error {
+      font-size: 14px;
+      color: #ff3d00;
+      margin-top: 4px;
+    }
+  }
+}

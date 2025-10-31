@@ -1,0 +1,51 @@
+<div class="form-group subtasks-group">
+  <label>Subtasks</label>
+  <div class="subtask-input-wrapper">
+    <input type="text" [(ngModel)]="newSubtaskTitle" name="newSubtask" placeholder="Add new subtask"
+      (keyup.enter)="addSubtask()" />
+    <div class="subtask-actions">
+      <button type="button" class="icon-btn" (click)="clearInput()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M13 1L1 13M1 1L13 13" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+      <div class="divider"></div>
+      <button type="button" class="icon-btn" (click)="addSubtask()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 8L6 12L12 2" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  @if (subtasks.length > 0) {
+  <div class="subtasks-list">
+    @for (subtask of subtasks; track subtask.id) {
+    <div class="subtask-item">
+      @if (editingSubtaskId === subtask.id) {
+      <input type="text" #editInput [value]="subtask.title" (keyup.enter)="saveSubtask(subtask, editInput.value)"
+        (blur)="saveSubtask(subtask, editInput.value)" class="edit-input" />
+      } @else {
+      <span>{{ subtask.title }}</span>
+      }
+      <div class="subtask-item-actions">
+        <button type="button" class="icon-btn small" (click)="startEditSubtask(subtask.id)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+              fill="#2A3647" />
+          </svg>
+        </button>
+        <button type="button" class="icon-btn small" (click)="deleteSubtask(subtask.id)">
+          <svg width="24" height="24" viewBox="0 0 16 18" fill="none">
+            <path
+              d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM13 3H3V16H13V3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
+              fill="#2A3647" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+  }
+</div>

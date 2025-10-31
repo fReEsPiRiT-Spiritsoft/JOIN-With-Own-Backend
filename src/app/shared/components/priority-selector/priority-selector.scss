@@ -1,0 +1,66 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 20px;
+    font-weight: 400;
+    color: #2a3647;
+  }
+}
+
+.priority-group {
+  .priority-label {
+    font-size: 20px;
+    font-weight: 400;
+    color: #2a3647;
+  }
+
+  .priority-buttons {
+    display: flex;
+    gap: 16px;
+
+    .priority-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px;
+      background: white;
+      border: 1px solid #d1d1d1;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 400;
+      color: #2a3647;
+      transition: all 0.2s ease;
+
+      &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      &.active {
+        color: white;
+        border-color: transparent;
+
+        &:not(.medium):not(.low) {
+          background: #ff3d00;
+        }
+      }
+
+      &.medium.active {
+        background: #ffa800;
+      }
+
+      &.low.active {
+        background: #7ae229;
+      }
+
+      svg {
+        flex-shrink: 0;
+      }
+    }
+  }
+}

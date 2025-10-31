@@ -1,0 +1,39 @@
+<div class="form-group assigned-group">
+    <label>Assigned to</label>
+    <div class="dropdown-wrapper">
+        <div class="dropdown-toggle" (click)="toggleContactDropdown()">
+            <span>Select contacts to assign</span>
+            <svg width="14" height="8" viewBox="0 0 14 8" fill="none" [class.rotated]="showContactDropdown">
+                <path d="M1 1L7 7L13 1" stroke="#2A3647" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </div>
+
+        @if (showContactDropdown) {
+        <div class="dropdown-menu contacts-dropdown">
+            @for (contact of contacts; track contact.id) {
+            <div class="contact-item" [class.selected]="isContactSelected(contact.id!)"
+                (click)="toggleContact(contact.id!)">
+                <div class="contact-info">
+                    <div class="avatar" [style.background-color]="getAvatarColor(contact)">
+                        {{ getInitials(contact) }}
+                    </div>
+                    <span>{{ contact.firstname }}</span>
+                </div>
+                <img [src]="isContactSelected(contact.id!) ? 'assets/check-box/checkbox-white.png' : 'assets/board/check-button.png'"
+                    class="contact-checkbox" alt="checkbox">
+            </div>
+            }
+        </div>
+        }
+
+        @if (selectedContactIds.length > 0) {
+        <div class="selected-contacts">
+            @for (contact of getSelectedContacts(); track contact.id) {
+            <div class="avatar small" [style.background-color]="getAvatarColor(contact)" [title]="contact.firstname">
+                {{ getInitials(contact) }}
+            </div>
+            }
+        </div>
+        }
+    </div>
+</div>
