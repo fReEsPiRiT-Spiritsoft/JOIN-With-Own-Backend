@@ -197,8 +197,8 @@
     // gap: 4px;
     width: 100%;
     align-self: stretch;
-    max-height: 176px; // 3 Kontakte * (56px height + 4px gap) - 4px letzte gap
-    overflow-y: auto;
+    // max-height: 176px; // 3 Kontakte * (56px height + 4px gap) - 4px letzte gap
+    // overflow-y: auto;
 
     // Scrollbar Styling
     &::-webkit-scrollbar {
@@ -292,8 +292,8 @@
     gap: 4px;
     width: 100%;
     height: 68px;
-    max-height: 68px;
-    overflow-y: auto;
+    // max-height: 68px;
+    // overflow-y: auto;
     align-self: stretch;
 
     // Scrollbar Styling
@@ -316,34 +316,7 @@
     }
   }
 
-  .task-content-scrollable {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    max-height: calc(90vh - 200px); 
-    padding-right: 8px; 
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-      margin: 4px 0;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: #29abe2;
-      border-radius: 10px;
-
-      &:hover {
-        background: #1c8bb8;
-      }
-    }
-  }
+  
 
   .subtask-item {
     display: flex;
@@ -388,6 +361,36 @@
     }
   }
 }
+
+
+.task-content-scrollable {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(90vh - 200px); 
+    padding-right: 8px; 
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+      margin: 4px 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #29abe2;
+      border-radius: 10px;
+
+      &:hover {
+        background: #1c8bb8;
+      }
+    }
+  }
 
 .modal-actions {
   display: flex;
