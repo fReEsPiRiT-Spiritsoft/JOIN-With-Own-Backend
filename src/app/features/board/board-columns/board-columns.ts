@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
 import { Task } from '../../../core/interfaces/board-tasks-interface';
@@ -14,7 +14,7 @@ import { Firestore, writeBatch, doc } from '@angular/fire/firestore';
   styleUrl: './board-columns.scss',
   standalone: true,
 })
-export class BoardColumns {
+export class BoardColumns implements OnInit {
   @Input() title: string = '';
   @Input() tasks: Task[] = [];
   @Input() columnId: string = '';
@@ -23,11 +23,23 @@ export class BoardColumns {
   @Output() taskClicked = new EventEmitter<Task>();
   @Output() taskDropped = new EventEmitter<CdkDragDrop<Task[]>>();
   @Output() subtaskToggled = new EventEmitter<{ task: Task; subtask: any }>();
+  @Output() moveTaskRequested = new EventEmitter<{ task: Task; targetColumn: string }>();
 
   private taskService = inject(BoardTasksService);
-  private firestore = inject(Firestore); // ✅ DIESE ZEILE HINZUFÜGEN
+  private firestore = inject(Firestore);
 
   isHovering = false;
+  isMobile = false; // ✅ Zurück zu isMobile
+  showMoveMenu: { [key: string]: boolean } = {};
+
+  @HostListener('window:resize')
+  checkScreenSize() {
+    this.isMobile = window.innerWidth <= 1024; // ✅ Mobile = <= 1024px
+  }
+
+  ngOnInit() {
+    this.checkScreenSize();
+  }
 
   get addTaskIcon(): string {
     return this.isHovering ? 'assets/board/add-task-v2.png' : 'assets/board/add-task-v4.png';
@@ -45,7 +57,22 @@ export class BoardColumns {
     this.subtaskToggled.emit(event);
   }
 
+  toggleMoveMenu(taskId: string, event: Event) {
+    event.stopPropagation();
+    this.showMoveMenu[taskId] = !this.showMoveMenu[taskId];
+  }
+
+  moveTaskToColumn(task: Task, targetColumn: string, event: Event) {
+    event.stopPropagation();
+    this.moveTaskRequested.emit({ task, targetColumn }); // ✅ Nur task und targetColumn
+    this.showMoveMenu[task.id!] = false;
+  }
+
   async onDrop(event: CdkDragDrop<Task[]>) {
+    if (this.isMobile) { // ✅ isMobile Check
+      return;
+    }
+
     const task = event.item.data as Task;
     
     if (event.previousContainer === event.container) {

@@ -9,19 +9,53 @@
         }
     </div>
 
-    <div class="tasks-container" cdkDropList [cdkDropListData]="tasks" [id]="columnId"
-        [cdkDropListConnectedTo]="['todo', 'inprogress', 'awaitfeedback', 'done']"
-        (cdkDropListDropped)="onDrop($event)">
+    <div class="tasks-container" 
+         cdkDropList 
+         [cdkDropListData]="tasks" 
+         [id]="columnId"
+         [cdkDropListDisabled]="isMobile"
+         [cdkDropListConnectedTo]="isMobile ? [] : ['todo', 'inprogress', 'awaitfeedback', 'done']"
+         (cdkDropListDropped)="onDrop($event)">
         @if (tasks.length === 0) {
         <div class="empty-state">
             <p>No tasks {{ title }}</p>
         </div>
         } @else {
         @for (task of tasks; track task.id) {
-        <div cdkDrag [cdkDragData]="task">
-            <app-task-card [task]="task" (cardClicked)="onTaskClick($event)"
+        <div cdkDrag 
+             [cdkDragData]="task"
+             [cdkDragDisabled]="isMobile"
+             class="task-wrapper">
+            <app-task-card 
+                [task]="task" 
+                (cardClicked)="onTaskClick($event)"
                 (subtaskToggled)="onSubtaskToggled($event)">
             </app-task-card>
+            
+            @if (isMobile) {
+            <button class="mobile-move-btn" (click)="toggleMoveMenu(task.id!, $event)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M7 10l5 5 5-5z" fill="#2A3647"/>
+                </svg>
+            </button>
+            
+            @if (showMoveMenu[task.id!]) {
+            <div class="move-menu">
+                @if (columnId !== 'todo') {
+                <button (click)="moveTaskToColumn(task, 'todo', $event)">Move to To Do</button>
+                }
+                @if (columnId !== 'inprogress') {
+                <button (click)="moveTaskToColumn(task, 'inprogress', $event)">Move to In Progress</button>
+                }
+                @if (columnId !== 'awaitfeedback') {
+                <button (click)="moveTaskToColumn(task, 'awaitfeedback', $event)">Move to Await Feedback</button>
+                }
+                @if (columnId !== 'done') {
+                <button (click)="moveTaskToColumn(task, 'done', $event)">Move to Done</button>
+                }
+            </div>
+            }
+            }
         </div>
         }
         }

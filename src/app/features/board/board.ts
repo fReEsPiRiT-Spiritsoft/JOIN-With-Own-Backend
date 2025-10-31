@@ -206,4 +206,25 @@ export class Board implements OnInit, OnDestroy {
       event.subtask.completed = !event.subtask.completed;
     }
   }
+
+  async onMoveTaskRequested(event: { task: Task; targetColumn: string }) {
+  try {
+    const { task, targetColumn } = event;
+    if (!task.id || !targetColumn) {
+      console.error('Invalid task or target column');
+      return;
+    }
+    const updatedTask = { 
+      ...task, 
+      status: targetColumn as 'todo' | 'inprogress' | 'awaitfeedback' | 'done' 
+    };
+    await this.taskService.updateTask(task.id, updatedTask);
+    console.log(`Task "${task.title}" moved to ${targetColumn}`);
+    
+  } catch (error) {
+    console.error('Error moving task:', error);
+  }
 }
+}
+
+
