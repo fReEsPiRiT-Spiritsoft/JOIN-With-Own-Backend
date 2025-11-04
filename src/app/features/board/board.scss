@@ -31,7 +31,7 @@
 
   .board-columns-wrapper {
     flex-direction: column;
-    padding: 0 0 0 16px;
+    padding: 0 16px;
     gap: 24px;
 
     app-board-columns {
@@ -85,7 +85,7 @@
 
   .board-columns-wrapper {
     flex-direction: column;
-    padding: 0 0 0 16px;
+    padding: 0 16px;
     gap: 24px;
 
     app-board-columns {
@@ -127,7 +127,7 @@
   }
 
   .board-columns-wrapper {
-    padding: 0 0 0 8px;
+    padding: 0 8px;
     gap: 20px;
 
     app-board-columns {
