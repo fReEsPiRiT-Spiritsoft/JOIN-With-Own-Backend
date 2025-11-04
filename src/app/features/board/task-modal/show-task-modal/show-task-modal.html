@@ -51,7 +51,7 @@
           @for (subtask of task.subtasks; track subtask.id) {
           <div class="subtask-item" (click)="toggleSubtask(subtask.id)">
             <img class="checkbox"
-              [src]="subtask.completed ? '/assets/check-box/check-box-checked.png' : '/assets/check-box/check-box.png'"
+              [src]="subtask.completed ? 'assets/check-box/check-box-checked.png' : 'assets/check-box/check-box.png'"
               [alt]="subtask.completed ? 'Checked' : 'Unchecked'" />
             <span class="subtask-title" [class.completed]="subtask.completed">{{ subtask.title }}</span>
           </div>
