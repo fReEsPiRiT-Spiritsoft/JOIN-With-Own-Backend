@@ -1,5 +1,5 @@
 * {
-  margin: 0;
+  margin: 0px;
   padding: 0;
   box-sizing: border-box;
 }
@@ -47,7 +47,7 @@ body {
 .main-container {
   display: flex;
   gap: 60px;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .metrics-grid {
@@ -68,6 +68,8 @@ body {
   gap: 18px;
   opacity: 1;
   padding: 38px 19px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 
   &.full-width {
     grid-column: 1 / -1;
@@ -85,10 +87,19 @@ body {
   border-radius: 50%;
   background-color: #2A3647;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &.urgent-icon {
     background-color: #FF3D00;
   }
+}
+
+.metric-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
 }
 
 .metric-content {
@@ -162,6 +173,8 @@ body {
   justify-content: center;
   align-items: center;
   padding: 0 40px;
+  height: 100%; 
+  min-height: 500px;
 
   p {
     font-family: 'Inter', sans-serif;

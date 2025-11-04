@@ -42,6 +42,9 @@
   position: absolute;
   top: clamp(40px, 5vw, 48px);
   right: clamp(30px, 3vw, 40px);
+  width: clamp(22px, 2.8vw, 28px);  
+  height: clamp(22px, 2.8vw, 28px); 
+  margin-top: clamp(4px, 0.5vw, 6px);
   width: clamp(22px, 2.8vw, 28px);
   height: clamp(22px, 2.8vw, 28px);
   background: none;
