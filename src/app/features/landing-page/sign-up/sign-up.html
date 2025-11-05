@@ -1,1 +1,68 @@
-<p>sign-up works!</p>
+<div class="signup-page">
+    <!-- Logo in top left -->
+    <div class="logo-container">
+        <img src="assets/header-join-icon.png" alt="Join Logo" class="logo-img" />
+    </div>
+
+    <!-- Sign Up Card -->
+    <div class="signup-card">
+        <!-- Back Button -->
+        <button type="button" class="back-btn" (click)="goBackToLogin()">
+            <img src="assets/responsive-back-button.png" alt="Back" class="back-icon" />
+        </button>
+
+        <h1>Sign up</h1>
+        <div class="underline"></div>
+
+        <form class="signup-form">
+            <!-- Name Input -->
+            <div class="input-group">
+                <input type="text" [(ngModel)]="name" name="name" placeholder="Name" class="form-input" />
+                <img src="assets/person-icon.png" alt="Name" class="input-icon" />
+            </div>
+
+            <!-- Email Input -->
+            <div class="input-group">
+                <input type="email" [(ngModel)]="email" name="email" placeholder="Email" class="form-input" />
+                <img src="assets/signup/mail-signup.png" alt="Email" class="input-icon" />
+            </div>
+
+            <!-- Password Input -->
+            <div class="input-group">
+                <input type="password" [(ngModel)]="password" name="password" placeholder="Password"
+                    class="form-input" />
+                <img src="assets/signup/lock-signup.png" alt="Password" class="input-icon" />
+            </div>
+
+            <!-- Confirm Password Input -->
+            <div class="input-group">
+                <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword"
+                    placeholder="Confirm Password" class="form-input" />
+                <img src="assets/signup/lock-signup.png" alt="Confirm Password" class="input-icon" />
+            </div>
+
+            <!-- Privacy Policy Checkbox -->
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" [(ngModel)]="acceptPrivacyPolicy" name="acceptPrivacyPolicy"
+                        class="checkbox-input" />
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-text">
+                        I accept the <a routerLink="/privacy-policy" class="privacy-link">Privacy policy</a>
+                    </span>
+                </label>
+            </div>
+
+            <!-- Sign Up Button -->
+            <button type="button" class="btn-primary" (click)="onSignUp()">
+                Sign up
+            </button>
+        </form>
+    </div>
+
+    <!-- Footer Links -->
+    <footer class="signup-footer">
+        <a routerLink="/privacy-policy">Privacy Policy</a>
+        <a routerLink="/legal-notice">Legal notice</a>
+    </footer>
+</div>
