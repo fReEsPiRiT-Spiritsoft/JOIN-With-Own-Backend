@@ -20,13 +20,14 @@ export class App implements OnInit {
   private contactService = inject(ContactService);
   private router = inject(Router);
 
-  constructor() {
-    // Check route immediately in constructor to prevent flash
-    this.checkRoute(this.router.url);
-  }
-
   async ngOnInit() {
-    this.contacts = await this.contactService.getAllContacts();
+    // Check initial route IMMEDIATELY
+    this.checkRoute(this.router.url);
+
+    // Load contacts in parallel without blocking
+    this.contactService.getAllContacts().then((contacts) => {
+      this.contacts = contacts;
+    });
 
     // Listen to route changes
     this.router.events
