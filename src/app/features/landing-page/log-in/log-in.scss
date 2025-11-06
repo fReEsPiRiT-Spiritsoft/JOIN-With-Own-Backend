@@ -19,8 +19,7 @@
   z-index: 20;
 
   @media (max-width: 768px) {
-    top: 20px;
-    right: 30px;
+    display: none;
   }
 
   .not-user-text {
@@ -45,6 +44,41 @@
   }
 }
 
+// Mobile Header Actions (below card)
+.header-actions-mobile {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(12px, 4vw, 20px);
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .not-user-text {
+    font-size: clamp(14px, 3.5vw, 16px);
+    color: #2a3647;
+  }
+
+  .signup-btn {
+    background-color: #2a3647;
+    color: white;
+    border: none;
+    padding: clamp(8px, 2.5vw, 12px) clamp(16px, 5vw, 24px);
+    border-radius: 8px;
+    font-size: clamp(14px, 3.5vw, 16px);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #29abe2;
+    }
+  }
+}
+
 // Login Card
 .login-card {
   background: #ffffff;
@@ -58,9 +92,17 @@
   gap: 16px;
 
   @media (max-width: 768px) {
-    padding: 40px 30px;
-    width: 90%;
-    max-width: 500px;
+    padding: clamp(20px, 8vw, 32px) clamp(12px, 3vw, 16px);
+    width: clamp(320px, 92vw, 396px);
+    min-height: auto;
+    gap: clamp(20px, 8vw, 32px);
+    margin: 0 16px;
+  }
+
+  // Reduzierte Abstände bei niedriger Bildschirmhöhe
+  @media (max-height: 800px) {
+    padding: clamp(16px, 3vh, 32px) clamp(20px, 4vw, 60px);
+    gap: clamp(8px, 2vh, 16px);
   }
 
   h1 {
@@ -74,7 +116,11 @@
     margin: 0;
 
     @media (max-width: 768px) {
-      font-size: 48px;
+      font-size: clamp(32px, 11vw, 47px);
+    }
+
+    @media (max-height: 800px) {
+      font-size: clamp(28px, 6vh, 48px);
     }
   }
 
@@ -84,6 +130,14 @@
     background-color: #29abe2;
     border-radius: 2px;
     margin: 0 0 16px 0;
+
+    @media (max-width: 768px) {
+      width: clamp(60px, 20vw, 88px);
+    }
+
+    @media (max-height: 800px) {
+      margin: 0 0 clamp(4px, 1vh, 12px) 0;
+    }
   }
 }
 
@@ -94,6 +148,10 @@
   align-items: center;
   gap: 32px;
   width: 100%;
+
+  @media (max-height: 800px) {
+    gap: clamp(12px, 3vh, 24px);
+  }
 }
 
 .input-group {
@@ -101,7 +159,8 @@
   width: 422px;
 
   @media (max-width: 768px) {
-    width: 100%;
+    width: clamp(280px, 85vw, 364px);
+    max-width: 100%;
   }
 
   .form-input {
@@ -114,7 +173,7 @@
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
+    font-size: clamp(16px, 4.5vw, 20px);
     line-height: 120%;
     color: #000000;
     outline: none;
@@ -152,7 +211,13 @@
 
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 16px;
+    gap: clamp(14px, 5vw, 21px);
+    width: clamp(140px, 42vw, 180px);
+  }
+
+  @media (max-height: 800px) {
+    gap: clamp(12px, 3vh, 28px);
+    margin-top: clamp(4px, 1vh, 12px);
   }
 
   button {
@@ -173,6 +238,15 @@
 
     @media (max-width: 768px) {
       width: 100%;
+      height: clamp(44px, 12vw, 51px);
+      padding: 4px 0px;
+      font-size: clamp(14px, 3.7vw, 16px);
+    }
+
+    @media (max-height: 800px) {
+      height: clamp(36px, 6vh, 48px);
+      padding: clamp(8px, 2vh, 15px) clamp(12px, 3vw, 24px);
+      font-size: clamp(16px, 3vh, 21px);
     }
   }
 
