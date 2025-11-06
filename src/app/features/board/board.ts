@@ -8,7 +8,6 @@ import { TaskModal } from './task-modal/task-modal';
 import { ShowTaskModal } from './task-modal/show-task-modal/show-task-modal';
 import { BoardHeader } from './board-header/board-header';
 
-
 @Component({
   selector: 'app-board',
   imports: [CommonModule, BoardColumns, TaskModal, ShowTaskModal, BoardHeader],
@@ -19,6 +18,10 @@ import { BoardHeader } from './board-header/board-header';
 export class Board implements OnInit, OnDestroy {
   private taskService = inject(BoardTasksService);
   private tasksSubscription?: Subscription;
+  private viewModeSubscription?: Subscription;
+
+  // ✅ NEU - View Mode State
+  currentViewMode: 'public' | 'private' = 'public';
 
   allTasks = {
     todo: [] as Task[],
@@ -44,12 +47,36 @@ export class Board implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadTasks();
+    this.subscribeToViewMode();
   }
+
+
+  
 
   ngOnDestroy() {
     if (this.tasksSubscription) {
       this.tasksSubscription.unsubscribe();
     }
+    if (this.viewModeSubscription) {
+      this.viewModeSubscription.unsubscribe();
+    }
+  }
+
+  /**
+   * ✅ Subscribt auf View Mode Änderungen
+   */
+  subscribeToViewMode() {
+    this.viewModeSubscription = this.taskService.viewMode$.subscribe(mode => {
+      this.currentViewMode = mode;
+    });
+  }
+
+  /**
+   * ✅ Toggle zwischen Public/Private
+   */
+  async toggleViewMode() {
+    const newMode = this.currentViewMode === 'public' ? 'private' : 'public';
+    await this.taskService.toggleViewMode(newMode);
   }
 
   loadTasks() {
@@ -60,16 +87,19 @@ export class Board implements OnInit, OnDestroy {
         this.allTasks.inprogress = tasks.inprogress.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
         this.allTasks.awaitfeedback = tasks.awaitfeedback.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
         this.allTasks.done = tasks.done.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        
         if (this.showViewTaskModal && this.selectedTask && this.selectedTask.id) {
           const updatedTask = this.findTaskById(this.selectedTask.id);
           if (updatedTask) {
             this.selectedTask = { ...updatedTask };
           }
         }
+        
         this.updateDisplayedTasks();
         this.isLoading = false;
       },
       error: (error) => {
+        console.error('Error loading tasks:', error);
         this.isLoading = false;
       },
     });
@@ -78,9 +108,7 @@ export class Board implements OnInit, OnDestroy {
   findTaskById(taskId: string): Task | null {
     for (const column of this.columns) {
       const task = column.tasks.find((t) => t.id === taskId);
-      if (task) {
-        return task;
-      }
+      if (task) return task;
     }
     return null;
   }
@@ -111,6 +139,7 @@ export class Board implements OnInit, OnDestroy {
 
       this.searchError = totalFound === 0 ? 'No tasks found' : '';
     }
+    
     this.columns.forEach(col => {
       col.tasks.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     });
@@ -121,40 +150,9 @@ export class Board implements OnInit, OnDestroy {
       const matchesTitle = task.title.toLowerCase().includes(this.searchQuery);
       const matchesDescription =
         task.description && task.description.toLowerCase().includes(this.searchQuery);
-
       return matchesTitle || matchesDescription;
     });
   }
-
-  // async onTaskDrop(event: CdkDragDrop<Task[]>) {
-  //   if (event.previousContainer === event.container) {
-  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  //   } else {
-  //     const task = event.previousContainer.data[event.previousIndex];
-  //     const newStatus = this.getStatusFromContainerId(event.container.id);
-  //     transferArrayItem(
-  //       event.previousContainer.data,
-  //       event.container.data,
-  //       event.previousIndex,
-  //       event.currentIndex
-  //     );
-  //     try {
-  //       await this.taskService.updateTaskStatus(task.id!, newStatus);
-  //     } catch (error) {
-  //       console.error('Error updating task status:', error);
-  //       transferArrayItem(
-  //         event.container.data,
-  //         event.previousContainer.data,
-  //         event.currentIndex,
-  //         event.previousIndex
-  //       );
-  //     }
-  //   }
-  // }
-
-  // getStatusFromContainerId(containerId: string): 'todo' | 'inprogress' | 'awaitfeedback' | 'done' {
-  //   return containerId as 'todo' | 'inprogress' | 'awaitfeedback' | 'done';
-  // }
 
   openAddTaskModal(status: string) {
     this.defaultStatus = status as 'todo' | 'inprogress' | 'awaitfeedback' | 'done';
@@ -202,28 +200,24 @@ export class Board implements OnInit, OnDestroy {
       await this.taskService.updateTask(event.task.id!, event.task);
     } catch (error) {
       console.error('Error updating subtask:', error);
-      // Revert the change on error
       event.subtask.completed = !event.subtask.completed;
     }
   }
 
   async onMoveTaskRequested(event: { task: Task; targetColumn: string }) {
-  try {
-    const { task, targetColumn } = event;
-    if (!task.id || !targetColumn) {
-      console.error('Invalid task or target column');
-      return;
+    try {
+      const { task, targetColumn } = event;
+      if (!task.id || !targetColumn) {
+        console.error('Invalid task or target column');
+        return;
+      }
+      const updatedTask = { 
+        ...task, 
+        status: targetColumn as 'todo' | 'inprogress' | 'awaitfeedback' | 'done' 
+      };
+      await this.taskService.updateTask(task.id, updatedTask);
+    } catch (error) {
+      console.error('Error moving task:', error);
     }
-    const updatedTask = { 
-      ...task, 
-      status: targetColumn as 'todo' | 'inprogress' | 'awaitfeedback' | 'done' 
-    };
-    await this.taskService.updateTask(task.id, updatedTask);
-    
-  } catch (error) {
-    console.error('Error moving task:', error);
   }
 }
-}
-
-
