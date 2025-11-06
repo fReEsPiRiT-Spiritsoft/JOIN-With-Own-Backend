@@ -19,15 +19,46 @@ export class AuthService {
   public currentUser$: Observable<User | null> = this.currentUserSubject.asObservable();
 
   constructor() {
+    this.checkLocalStorage(); 
+    this.listenToStorageChanges();
+  }
+
+  /**
+   *  Prüft localStorage und lädt User
+   */
+  private checkLocalStorage(): void {
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
-      this.currentUserSubject.next(JSON.parse(savedUser));
+      try {
+        const user = JSON.parse(savedUser);
+        this.currentUserSubject.next(user);
+      } catch (error) {
+        console.error('Error parsing saved user:', error);
+        localStorage.removeItem('currentUser');
+      }
     }
   }
 
   /**
-   * Registriert einen neuen User
+   *  Hört auf localStorage-Änderungen
    */
+  private listenToStorageChanges(): void {
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'currentUser') {
+        if (event.newValue) {
+          try {
+            const user = JSON.parse(event.newValue);
+            this.currentUserSubject.next(user);
+          } catch (error) {
+            console.error('Error parsing user from storage event:', error);
+          }
+        } else {
+          this.currentUserSubject.next(null);
+        }
+      }
+    });
+  }
+
   async register(data: RegisterData): Promise<{ success: boolean; message: string; user?: User }> {
     try {
       const existingUser = await this.getUserByEmail(data.email);
@@ -58,52 +89,31 @@ export class AuthService {
     }
   }
 
-  /**
-   * Erstellt einen Contact aus User-Daten
-   */
   private async createContactFromUser(user: User): Promise<void> {
-  try {
-    const contactsRef = collection(this.firestore, 'contacts');
-    
-    const contact: Omit<Contact, 'id'> = {
-      firstname: user.name, 
-      lastname: '', 
-      email: user.email,
-      phone: ''
-    };
-    await addDoc(contactsRef, contact);
-  } catch (error) {
-    console.error('Error creating contact:', error);
+    try {
+      const contactsRef = collection(this.firestore, 'contacts');
+      const contact: Omit<Contact, 'id'> = {
+        firstname: user.name, 
+        lastname: '', 
+        email: user.email,
+        phone: ''
+      };
+      await addDoc(contactsRef, contact);
+      console.log('Contact created for user:', user.email);
+    } catch (error) {
+      console.error('Error creating contact:', error);
+    }
   }
-}
 
-  /**
-   * Generiert zufällige Farbe für Contact
-   */
   private generateRandomColor(): string {
     const colors = [
-      '#FF7A00', // Orange
-      '#FF5EB3', // Pink
-      '#6E52FF', // Purple
-      '#9327FF', // Violet
-      '#00BEE8', // Cyan
-      '#1FD7C1', // Teal
-      '#FF745E', // Coral
-      '#FFA35E', // Light Orange
-      '#FC71FF', // Magenta
-      '#FFC701', // Yellow
-      '#0038FF', // Blue
-      '#C3FF2B', // Lime
-      '#FFE62B', // Gold
-      '#FF4646', // Red
-      '#FFBB2B', // Amber
+      '#FF7A00', '#FF5EB3', '#6E52FF', '#9327FF', '#00BEE8', 
+      '#1FD7C1', '#FF745E', '#FFA35E', '#FC71FF', '#FFC701', 
+      '#0038FF', '#C3FF2B', '#FFE62B', '#FF4646', '#FFBB2B'
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   }
 
-  /**
-   * Login mit Email und Passwort
-   */
   async login(credentials: LoginCredentials): Promise<{ success: boolean; message: string; user?: User }> {
     try {
       const user = await this.getUserByEmail(credentials.email); 
@@ -124,31 +134,19 @@ export class AuthService {
     }
   }
 
-  /**
-   * Logout
-   */
   logout(): void {
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
   }
 
-  /**
-   * Prüft ob User eingeloggt ist
-   */
   isLoggedIn(): boolean {
     return this.currentUserSubject.value !== null;
   }
 
-  /**
-   * Gibt aktuellen User zurück
-   */
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
 
-  /**
-   * Holt User aus Firestore anhand Email
-   */
   private async getUserByEmail(email: string): Promise<User | null> {
     const usersRef = collection(this.firestore, 'users');
     const q = query(usersRef, where('email', '==', email));
@@ -163,9 +161,6 @@ export class AuthService {
     };
   }
 
-  /**
-   * Verschlüsselt Passwort mit Web Crypto API
-   */
   private async hashPassword(password: string): Promise<string> {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
@@ -175,9 +170,6 @@ export class AuthService {
     return hashHex;
   }
 
-  /**
-   * Verifiziert Passwort
-   */
   private async verifyPassword(inputPassword: string, storedHash: string): Promise<boolean> {
     const inputHash = await this.hashPassword(inputPassword);
     return inputHash === storedHash;
