@@ -1,3 +1,27 @@
+
+@if (!isLoggedIn) {
+<nav class="navbar">
+    <div class="navbar-header">
+        <img src="assets/header-join-icon-vector.png" alt="Join Logo" class="logo" />
+    </div>
+
+    <ul class="nav-links">
+        <li>
+            <a routerLink="/login" routerLinkActive="active" class="nav-link">
+                <img src="assets/login.png" alt="Summary" class="nav-icon2" />
+                <span>Log In</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="navbar-footer">
+        <a routerLink="/privacy-policy" class="footer-link">Privacy Policy</a>
+        <a routerLink="/legal-notice" class="footer-link">Legal notice</a>
+    </div>
+</nav>
+}
+
+@if (isLoggedIn) {
 <nav class="navbar">
     <div class="navbar-header">
         <img src="assets/header-join-icon-vector.png" alt="Join Logo" class="logo" />
@@ -35,3 +59,4 @@
         <a routerLink="/legal-notice" class="footer-link">Legal notice</a>
     </div>
 </nav>
+}
