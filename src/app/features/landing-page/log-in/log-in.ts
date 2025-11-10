@@ -89,7 +89,7 @@ export class LogIn {
     this.isLoading = false;
 
     if (result.success) {
-      if (window.innerWidth < 1025 && result.user?.name) {
+      if (window.innerWidth < 1250 && result.user?.name) {
         this.showWelcomeAnimation(result.user.name);
       } else {
         this.router.navigate(['/summary']);
@@ -118,7 +118,7 @@ export class LogIn {
     this.authService['currentUserSubject'].next(guestUser);
     setTimeout(() => {
       this.isLoading = false;
-      if (window.innerWidth < 1025) {
+      if (window.innerWidth < 1250) {
         this.showWelcomeAnimation('Guest User');
       } else {
         this.router.navigate(['/summary']);
