@@ -12,68 +12,40 @@
         <form class="login-form" #loginForm="ngForm">
 
             <div class="input-group">
-                <input 
-                    type="email" 
-                    [(ngModel)]="email" 
-                    name="email" 
-                    placeholder="Email" 
-                    class="form-input"
-                    [class.error]="emailError"
-                    #emailInput="ngModel"
-                    required
-                    email
-                    (blur)="validateEmail()" />
+                <input type="email" [(ngModel)]="email" name="email" placeholder="Email" class="form-input"
+                    [class.error]="emailError" #emailInput="ngModel" required email (blur)="validateEmail()" />
                 <img src="assets/signup/mail-signup.png" alt="Email" class="input-icon" />
-                
+
                 <div class="error-message">
                     @if (emailError) {
-                        <span>{{ emailError }}</span>
+                    <span>{{ emailError }}</span>
                     }
                 </div>
             </div>
 
             <div class="input-group">
-                <input 
-                    type="password" 
-                    [(ngModel)]="password" 
-                    name="password" 
-                    placeholder="Password"
-                    class="form-input"
-                    [class.error]="passwordError"
-                    required
-                    (blur)="validatePassword()" />
+                <input type="password" [(ngModel)]="password" name="password" placeholder="Password" class="form-input"
+                    [class.error]="passwordError" required (blur)="validatePassword()" />
                 <img src="assets/signup/lock-signup.png" alt="Password" class="input-icon" />
-                
+
                 <div class="error-message">
                     @if (passwordError) {
-                        <span>{{ passwordError }}</span>
+                    <span>{{ passwordError }}</span>
                     }
                 </div>
             </div>
 
             @if (errorMessage) {
-                <div class="general-error">
-                    {{ errorMessage }}
-                </div>
+            <div class="general-error">
+                {{ errorMessage }}
+            </div>
             }
 
             <div class="button-group">
-                <button 
-                    type="button" 
-                    class="btn-primary" 
-                    (click)="onLogin()"
-                    [disabled]="isLoading">
-                    @if (isLoading) {
-                        <span>Logging in...</span>
-                    } @else {
-                        <span>Log in</span>
-                    }
+                <button type="button" class="btn-primary" (click)="onLogin()">
+                    Log in
                 </button>
-                <button 
-                    type="button" 
-                    class="btn-secondary" 
-                    (click)="onGuestLogin()"
-                    [disabled]="isLoading">
+                <button type="button" class="btn-secondary" (click)="onGuestLogin()">
                     Guest Log in
                 </button>
             </div>

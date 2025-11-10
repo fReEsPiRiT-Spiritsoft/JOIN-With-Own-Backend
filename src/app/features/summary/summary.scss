@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #F6F7F8;
+  background-color: #f6f7f8;
   padding: 60px 80px;
 }
 
@@ -31,7 +31,7 @@ body {
   .divider {
     width: 3px;
     height: 59px;
-    background-color: #29ABE2;
+    background-color: #29abe2;
     opacity: 1;
   }
 
@@ -63,7 +63,7 @@ body {
 }
 
 .metric-card {
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 30px;
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -78,27 +78,27 @@ body {
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: #2A3647;
+    background-color: #2a3647;
 
     .metric-number,
     .metric-label,
     .deadline-date,
     .deadline-label {
-      color: #FFFFFF;
+      color: #ffffff;
     }
 
     .icon-placeholder {
-      background-color: #FFFFFF;
+      background-color: #ffffff;
     }
 
     .divider-vertical {
-      border-color: #FFFFFF;
+      border-color: #ffffff;
     }
   }
 
   &.urgent-card:hover {
     .icon-placeholder.urgent-icon {
-      background-color: #FF3D00;
+      background-color: #ff3d00;
     }
   }
 
@@ -123,7 +123,7 @@ body {
   width: 69px;
   height: 69px;
   border-radius: 50%;
-  background-color: #2A3647;
+  background-color: #2a3647;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -131,7 +131,7 @@ body {
   transition: all 0.3s ease;
 
   &.urgent-icon {
-    background-color: #FF3D00;
+    background-color: #ff3d00;
   }
 }
 
@@ -170,7 +170,7 @@ body {
   line-height: 120%;
   letter-spacing: 0%;
   text-align: center;
-  color: #2A3647;
+  color: #2a3647;
   transition: color 0.3s ease;
 }
 
@@ -181,7 +181,7 @@ body {
 }
 
 .divider-vertical {
-  border-left: 2px solid #D1D1D1;
+  border-left: 2px solid #d1d1d1;
   height: 102px;
   transition: border-color 0.3s ease;
 }
@@ -210,7 +210,7 @@ body {
   font-size: 16px;
   line-height: 120%;
   letter-spacing: 0%;
-  color: #2A3647;
+  color: #2a3647;
   transition: color 0.3s ease;
 }
 
@@ -220,7 +220,7 @@ body {
   flex-direction: column;
   justify-content: center;
   padding: 0 70px;
-  height: 100%; 
+  height: 100%;
   min-height: 500px;
 
   p {
@@ -234,7 +234,7 @@ body {
   }
 
   .username {
-    color: #29ABE2;
+    color: #29abe2;
     font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-style: normal;
@@ -314,7 +314,7 @@ body {
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 660px) {
   .header-container {
     flex-direction: column;
     align-items: flex-start;
@@ -457,9 +457,9 @@ body {
 }
 
 @media (max-height: 740px) {
-      .header-container {
-        padding-left: 20px;
-        padding-top: 8px;
-        margin-bottom: 4px;
-    }
+  .header-container {
+    padding-left: 20px;
+    padding-top: 8px;
+    margin-bottom: 4px;
+  }
 }
