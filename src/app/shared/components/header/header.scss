@@ -248,6 +248,10 @@
   display: none;
 }
 
+.dropdown-item.mobile-only {
+  display: none;
+}
+
 @media (max-width: 450px) {
   .desktop-only {
     display: none !important;
@@ -257,11 +261,7 @@
     display: block;
   }
 
-  .help-btn.desktop-only {
-    display: none;
-  }
-
   .dropdown-item.mobile-only {
-    display: block;
+    display: block !important;
   }
 }

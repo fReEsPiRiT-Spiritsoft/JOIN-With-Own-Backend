@@ -1,7 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth-service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -10,92 +11,71 @@ import { AuthService } from '../../../core/services/auth-service';
   styleUrl: './header.scss',
   standalone: true,
 })
-export class Header implements OnInit {
+export class Header implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private userSubscription?: Subscription;
 
   userInitials = 'G';
   userName = 'Guest';
   showDropdown = false;
+  isLoggedIn = false; // ✅ Neu: Login-Status tracken
 
   ngOnInit() {
-    this.loadUserData();
+    // ✅ Observable subscriben um Login-Status zu tracken
+    this.userSubscription = this.authService.currentUser$.subscribe(user => {
+      this.isLoggedIn = !!user; // ✅ true wenn user existiert, sonst false
+      if (user && user.name) {
+        this.userName = user.name;
+        this.userInitials = this.getInitials(user.name);
+      } else {
+        this.userName = 'Guest';
+        this.userInitials = 'G';
+      }
+    });
   }
 
-  /**
-   * Lädt User-Daten und generiert Initialen
-   */
-  loadUserData() {
-    const currentUser = this.authService.getCurrentUser();
-    if (currentUser && currentUser.name) {
-      this.userName = currentUser.name;
-      this.userInitials = this.getInitials(currentUser.name);
-    }
+  ngOnDestroy() {
+    // ✅ Subscription cleanup
+    this.userSubscription?.unsubscribe();
   }
 
-  /**
-   * Generiert Initialen aus Name (Vor- und Nachname)
-   */
   getInitials(name: string): string {
     const nameParts = name.trim().split(' ');
     if (nameParts.length >= 2) {
-      // Vor- und Nachname vorhanden
       return (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase();
     } else if (nameParts.length === 1) {
-      // Nur ein Name
       return nameParts[0].substring(0, 2).toUpperCase();
     }
-    return 'G'; // Fallback
+    return 'G';
   }
 
-  /**
-   * Togglet Dropdown-Menü
-   */
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
   }
 
-  /**
-   * Schließt Dropdown wenn außerhalb geklickt wird
-   */
   closeDropdown() {
     this.showDropdown = false;
   }
 
-  /**
-   * Navigiert zu Legal Notice
-   */
   navigateToLegalNotice() {
     this.showDropdown = false;
     this.router.navigate(['/legal-notice']);
   }
 
-  /**
-   * Navigiert zu Privacy Policy
-   */
   navigateToPrivacyPolicy() {
     this.showDropdown = false;
     this.router.navigate(['/privacy-policy']);
   }
 
-  /**
-   * Logout
-   */
   logout() {
     this.authService.logout();
     this.showDropdown = false;
     this.router.navigate(['/login']);
   }
 
-  /**
-   * Navigiert zur Help-Seite
-   */
   navigateToHelp() {
     this.showDropdown = false;
     this.router.navigate(['/help']);
-  }
-
-  navigateToLogout() {
-    this.logout();
   }
 }
