@@ -102,7 +102,7 @@ export class Summary implements OnInit, OnDestroy {
   }
 
   private calculateUpcomingDeadline(tasks: Task[]): string {
-    const tasksWithDueDate = tasks.filter(t => t.dueDate && t.status !== 'done');
+    const tasksWithDueDate = tasks.filter(t => t.dueDate && t.status !== 'done' && t.priority !== 'low' && t.priority !== 'medium');
 
     if (tasksWithDueDate.length === 0) {
       return 'No deadline';
