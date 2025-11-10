@@ -455,3 +455,11 @@ body {
     }
   }
 }
+
+@media (max-height: 740px) {
+      .header-container {
+        padding-left: 20px;
+        padding-top: 8px;
+        margin-bottom: 4px;
+    }
+}
