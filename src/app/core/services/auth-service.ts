@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router'; 
 import { 
   Firestore, 
   collection, 
@@ -15,17 +16,15 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private firestore = inject(Firestore);
+  private router = inject(Router); 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$: Observable<User | null> = this.currentUserSubject.asObservable();
 
   constructor() {
     this.checkLocalStorage(); 
-    this.listenToStorageChanges();
+    this.listenToStorageChanges(); 
   }
 
-  /**
-   *  Prüft localStorage und lädt User
-   */
   private checkLocalStorage(): void {
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
@@ -40,7 +39,7 @@ export class AuthService {
   }
 
   /**
-   *  Hört auf localStorage-Änderungen
+   * 
    */
   private listenToStorageChanges(): void {
     window.addEventListener('storage', (event) => {
@@ -49,11 +48,19 @@ export class AuthService {
           try {
             const user = JSON.parse(event.newValue);
             this.currentUserSubject.next(user);
+            if (this.router.url === '/login' || this.router.url === '/signup') {
+              this.router.navigate(['/summary']);
+            }
           } catch (error) {
             console.error('Error parsing user from storage event:', error);
           }
         } else {
           this.currentUserSubject.next(null);
+          const currentUrl = this.router.url;
+          const publicPages = ['/login', '/signup', '/privacy-policy', '/legal-notice'];
+          if (!publicPages.includes(currentUrl)) {
+            this.router.navigate(['/login']);
+          }
         }
       }
     });
@@ -105,15 +112,6 @@ export class AuthService {
     }
   }
 
-  private generateRandomColor(): string {
-    const colors = [
-      '#FF7A00', '#FF5EB3', '#6E52FF', '#9327FF', '#00BEE8', 
-      '#1FD7C1', '#FF745E', '#FFA35E', '#FC71FF', '#FFC701', 
-      '#0038FF', '#C3FF2B', '#FFE62B', '#FF4646', '#FFBB2B'
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  }
-
   async login(credentials: LoginCredentials): Promise<{ success: boolean; message: string; user?: User }> {
     try {
       const user = await this.getUserByEmail(credentials.email); 
@@ -132,6 +130,22 @@ export class AuthService {
       console.error('Login error:', error);
       return { success: false, message: 'Login failed' };
     }
+  }
+
+  /**
+   *  Guest Login
+   */
+  loginAsGuest(): void {
+    const guestUser: User = {
+      id: 'guest',
+      email: 'guest@join.com',
+      name: 'Guest User',
+      password: '',
+      createdAt: new Date()
+    };
+    
+    localStorage.setItem('currentUser', JSON.stringify(guestUser));
+    this.currentUserSubject.next(guestUser);
   }
 
   logout(): void {

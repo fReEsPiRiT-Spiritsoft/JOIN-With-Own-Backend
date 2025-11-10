@@ -5,9 +5,15 @@ import { AuthService } from '../services/auth-service';
 export const authGuard = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-
-  if (authService.isLoggedIn()) {
+  const savedUser = localStorage.getItem('currentUser');
+  
+  if (authService.isLoggedIn() && savedUser) {
     return true;
+  }
+
+
+  if (!savedUser) {
+    authService.logout();
   }
 
   router.navigate(['/login']);
