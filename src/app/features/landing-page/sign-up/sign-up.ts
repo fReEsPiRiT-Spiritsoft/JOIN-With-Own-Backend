@@ -19,6 +19,7 @@ export class SignUp {
   acceptPrivacyPolicy = false;
   errorMessage = '';
   isLoading = false;
+  showSuccessMessage = false; 
   checkboxImageSrc = 'assets/check-box/check-box.png';
 
   fieldErrors: Record<string, string> = {};
@@ -87,7 +88,10 @@ export class SignUp {
     this.isLoading = false;
 
     if (result.success) {
-      this.router.navigate(['/login']);
+      this.showSuccessMessage = true;
+      setTimeout(() => {
+        this.router.navigate(['/login']);
+      }, 2000);
     } else {
       this.errorMessage = result.message;
     }
