@@ -24,7 +24,6 @@ export class LogIn {
   welcomeUserName = '';
   timeOfDay = 'morning';
 
-  // ✅ Caps Lock Warning
   capsLockOn = false;
 
   private router = inject(Router);
@@ -32,6 +31,7 @@ export class LogIn {
 
   validateEmail(): void {
     this.emailError = '';
+
 
     if (!this.email) {
       this.emailError = 'Email is required';
@@ -48,6 +48,7 @@ export class LogIn {
   validatePassword(): void {
     this.passwordError = '';
 
+
     if (!this.password) {
       this.passwordError = 'Password is required';
       return;
@@ -60,20 +61,18 @@ export class LogIn {
   }
 
   /**
-   * ✅ Caps Lock Detection
+   *  Caps Lock Detection
    */
   onPasswordKeydown(event: KeyboardEvent): void {
-    // getModifierState prüft ob Caps Lock aktiv ist
     this.capsLockOn = event.getModifierState('CapsLock');
   }
 
   /**
-   * ✅ Caps Lock bei Blur zurücksetzen
+   *  Caps Lock bei Blur zurücksetzen
    */
   onPasswordBlur(): void {
     this.validatePassword();
-    // Optional: Caps Lock Warning behalten oder entfernen
-    // this.capsLockOn = false;
+
   }
 
   async onLogin() {
@@ -86,7 +85,7 @@ export class LogIn {
     this.errorMessage = '';
     const result = await this.authService.login({
       email: this.email,
-      password: this.password
+      password: this.password,
     });
     this.isLoading = false;
 
@@ -114,7 +113,7 @@ export class LogIn {
       email: 'guest@join.com',
       name: 'Guest User',
       password: '',
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     localStorage.setItem('currentUser', JSON.stringify(guestUser));
     this.authService['currentUserSubject'].next(guestUser);

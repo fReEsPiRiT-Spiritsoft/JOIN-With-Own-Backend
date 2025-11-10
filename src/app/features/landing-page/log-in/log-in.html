@@ -32,6 +32,7 @@
                     (input)="onEmailInput()" />
                 <img src="assets/signup/mail-signup.png" alt="Email" class="input-icon" />
 
+
                 <div class="error-message">
                     @if (emailError) {
                     <span>{{ emailError }}</span>
@@ -45,6 +46,7 @@
                     (blur)="onPasswordBlur()" (input)="onPasswordInput()" />
                 <img src="assets/signup/lock-signup.png" alt="Password" class="input-icon" />
 
+
                 <div class="error-message">
                     @if (capsLockOn && !passwordError) {
                     <span class="warning-message"> Caps Lock is on</span>
@@ -56,6 +58,9 @@
             </div>
 
             @if (errorMessage) {
+            <div class="general-error">
+                {{ errorMessage }}
+            </div>
             <div class="general-error">
                 {{ errorMessage }}
             </div>
