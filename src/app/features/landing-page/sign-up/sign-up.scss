@@ -191,7 +191,6 @@
     position: absolute;
     right: clamp(14px, 2.5vw, 20px);
     top: clamp(12px, 2vw, 16px);
-    pointer-events: none;
     width: clamp(16px, 2.5vw, 20px);
     height: clamp(16px, 2.5vw, 20px);
   }
@@ -218,6 +217,16 @@
     .error-text {
       opacity: 1;
     }
+  }
+}
+
+.input-icon-clickable {
+  pointer-events: auto;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
   }
 }
 
@@ -376,6 +385,8 @@
     }
   }
 }
+
+
 
 // ✅ Success Message Overlay
 .success-overlay {

@@ -19,8 +19,15 @@ export class SignUp {
   acceptPrivacyPolicy = false;
   errorMessage = '';
   isLoading = false;
-  showSuccessMessage = false; 
+  showSuccessMessage = false;
   checkboxImageSrc = 'assets/check-box/check-box.png';
+
+  showPassword = false;
+  showConfirmPassword = false;
+
+  passwordIconSrc = 'assets/signup/lock-signup.png';
+  confirmPasswordIconSrc = 'assets/signup/lock-signup.png';
+
 
   fieldErrors: Record<string, string> = {};
 
@@ -103,19 +110,79 @@ export class SignUp {
 
   onCheckboxHover(isHovering: boolean) {
     if (this.acceptPrivacyPolicy) {
-      this.checkboxImageSrc = isHovering 
+      this.checkboxImageSrc = isHovering
         ? 'assets/check-box/checkbox-checked-hovered.png'
         : 'assets/check-box/check-box-checked.png';
     } else {
-      this.checkboxImageSrc = isHovering 
+      this.checkboxImageSrc = isHovering
         ? 'assets/check-box/check-box-hovered.png'
         : 'assets/check-box/check-box.png';
     }
   }
 
   onCheckboxChange() {
-    this.checkboxImageSrc = this.acceptPrivacyPolicy 
+    this.checkboxImageSrc = this.acceptPrivacyPolicy
       ? 'assets/check-box/check-box-checked.png'
       : 'assets/check-box/check-box.png';
+  }
+
+  onPasswordIconHover(isHovering: boolean): void {
+    console.log('Password Icon Hover:', isHovering);
+    console.log('showPassword:', this.showPassword);
+
+    if (!isHovering) {
+      this.passwordIconSrc = this.showPassword
+        ? 'assets/signup/eye.png'
+        : 'assets/signup/lock-signup.png';
+    } else {
+      this.passwordIconSrc = this.showPassword
+        ? 'assets/signup/eye-crossed-signup.png'
+        : 'assets/signup/eye.png';
+    }
+
+    console.log('New passwordIconSrc:', this.passwordIconSrc);
+  }
+
+  onConfirmPasswordIconHover(isHovering: boolean): void {
+    console.log('Confirm Password Icon Hover:', isHovering);
+    console.log('showConfirmPassword:', this.showConfirmPassword);
+
+    if (!isHovering) {
+      this.confirmPasswordIconSrc = this.showConfirmPassword
+        ? 'assets/signup/eye.png'
+        : 'assets/signup/lock-signup.png';
+    } else {
+      this.confirmPasswordIconSrc = this.showConfirmPassword
+        ? 'assets/signup/eye-crossed-signup.png'
+        : 'assets/signup/eye.png';
+    }
+
+    console.log('New confirmPasswordIconSrc:', this.confirmPasswordIconSrc);
+  }
+
+  togglePasswordVisibility(): void {
+    console.log('Toggle Password clicked');
+    console.log('Before toggle - showPassword:', this.showPassword);
+
+    this.showPassword = !this.showPassword;
+    this.passwordIconSrc = this.showPassword
+      ? 'assets/signup/eye.png'
+      : 'assets/signup/lock-signup.png';
+
+    console.log('After toggle - showPassword:', this.showPassword);
+    console.log('New passwordIconSrc:', this.passwordIconSrc);
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    console.log('Toggle Confirm Password clicked');
+    console.log('Before toggle - showConfirmPassword:', this.showConfirmPassword);
+
+    this.showConfirmPassword = !this.showConfirmPassword;
+    this.confirmPasswordIconSrc = this.showConfirmPassword
+      ? 'assets/signup/eye.png'
+      : 'assets/signup/lock-signup.png';
+
+    console.log('After toggle - showConfirmPassword:', this.showConfirmPassword);
+    console.log('New confirmPasswordIconSrc:', this.confirmPasswordIconSrc);
   }
 }
