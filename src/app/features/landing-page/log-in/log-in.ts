@@ -20,6 +20,10 @@ export class LogIn {
   isLoading = false;
   capsLockOn = false;
 
+  showPassword = false;
+  passwordIconSrc = 'assets/signup/lock-signup.png';
+  passwordTouched = false;
+
   private router = inject(Router);
   private authService = inject(AuthService);
 
@@ -39,6 +43,8 @@ export class LogIn {
   }
 
   validatePassword(): void {
+    if (!this.passwordTouched) return;
+
     this.passwordError = '';
 
     if (!this.password) {
@@ -52,26 +58,21 @@ export class LogIn {
     }
   }
 
-  /**
-   *  Caps Lock Detection
-   */
   onPasswordKeydown(event: KeyboardEvent): void {
     this.capsLockOn = event.getModifierState('CapsLock');
   }
 
-  /**
-   *  Caps Lock bei Blur zurücksetzen
-   */
   onPasswordBlur(): void {
     this.validatePassword();
   }
 
   async onLogin() {
+    this.passwordTouched = true;
     this.validateEmail();
     this.validatePassword();
-    if (this.emailError || this.passwordError) {
-      return;
-    }
+
+    if (this.hasValidationErrors()) return;
+
     this.isLoading = true;
     this.errorMessage = '';
     const result = await this.authService.login({
@@ -80,31 +81,58 @@ export class LogIn {
     });
     this.isLoading = false;
 
+    this.handleLoginResult(result);
+  }
+
+  private hasValidationErrors(): boolean {
+    return !!(this.emailError || this.passwordError);
+  }
+
+  private handleLoginResult(result: any): void {
     if (result.success) {
-      sessionStorage.setItem('justLoggedIn', 'true');
-      this.router.navigate(['/summary']);
+      this.handleSuccessfulLogin();
     } else {
-      this.errorMessage = result.message;
-      if (result.message.includes('email')) {
-        this.emailError = 'Invalid email or password';
-      } else if (result.message.includes('password')) {
-        this.passwordError = 'Invalid email or password';
-      }
+      this.handleLoginError(result.message);
+    }
+  }
+
+  private handleSuccessfulLogin(): void {
+    sessionStorage.setItem('justLoggedIn', 'true');
+    this.router.navigate(['/summary']);
+  }
+
+  private handleLoginError(message: string): void {
+    this.errorMessage = message;
+    if (message.includes('email')) {
+      this.emailError = 'Invalid email or password';
+    } else if (message.includes('password')) {
+      this.passwordError = 'Invalid email or password';
     }
   }
 
   onGuestLogin() {
     this.isLoading = true;
+    const guestUser = this.createGuestUser();
+    this.storeGuestUser(guestUser);
+    this.navigateToSummaryWithDelay();
+  }
 
-    const guestUser = {
+  private createGuestUser() {
+    return {
       id: 'guest',
       email: 'guest@join.com',
       name: 'Guest User',
       password: '',
       createdAt: new Date(),
     };
+  }
+
+  private storeGuestUser(guestUser: any): void {
     localStorage.setItem('currentUser', JSON.stringify(guestUser));
     this.authService['currentUserSubject'].next(guestUser);
+  }
+
+  private navigateToSummaryWithDelay(): void {
     setTimeout(() => {
       this.isLoading = false;
       sessionStorage.setItem('justLoggedIn', 'true');
@@ -126,11 +154,44 @@ export class LogIn {
   }
 
   onPasswordInput(): void {
+    this.passwordTouched = true;
     if (this.passwordError) {
       this.passwordError = '';
     }
     if (this.errorMessage) {
       this.errorMessage = '';
     }
+    this.updatePasswordIcon();
+  }
+
+  updatePasswordIcon(): void {
+    if (this.password.length === 0) {
+      this.passwordIconSrc = 'assets/signup/lock-signup.png';
+    } else {
+      this.passwordIconSrc = this.showPassword
+        ? 'assets/signup/eye.png'
+        : 'assets/signup/eye-crossed-signup.png';
+    }
+  }
+
+  onPasswordIconHover(isHovering: boolean): void {
+    if (this.password.length === 0) return;
+
+    if (isHovering) {
+      this.passwordIconSrc = this.showPassword
+        ? 'assets/signup/eye-crossed-signup.png'
+        : 'assets/signup/eye.png';
+    } else {
+      this.passwordIconSrc = this.showPassword
+        ? 'assets/signup/eye.png'
+        : 'assets/signup/eye-crossed-signup.png';
+    }
+  }
+
+  togglePasswordVisibility(): void {
+    if (this.password.length === 0) return;
+
+    this.showPassword = !this.showPassword;
+    this.updatePasswordIcon();
   }
 }
