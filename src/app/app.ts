@@ -52,13 +52,16 @@ export class App implements OnInit {
     const healthCheckPromise = this.boardTasksService.checkFirebaseConnection();
     const timeoutPromise = new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 2000));
     const isConnected = await Promise.race([healthCheckPromise, timeoutPromise]);
-    
+
     if (!isConnected && !this.hasReloaded) {
       console.error('Firebase not reachable, reloading once...');
       sessionStorage.setItem('hasReloaded', 'true');
-      setTimeout(() => location.reload(), 1000);
+      setTimeout(() => {
+        console.warn('Page must be reloaded');
+        location.reload();
+      }, 1000);
     } else {
-      console.error('Firebase is loaded or already reloaded.');
+      console.log('Firebase is loaded successfully.');
     }
     this.contactService.getAllContacts().then((contacts) => {
       this.contacts = contacts;
