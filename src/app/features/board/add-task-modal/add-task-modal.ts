@@ -53,6 +53,11 @@ export class AddTaskModal implements OnInit {
   @ViewChild(AddTaskModalFormFields) formFieldsComponent!: AddTaskModalFormFields;
 
   /**
+   * Lifecycle hook that runs on component initialization.
+   */
+  async ngOnInit() {}
+
+  /**
    * Handles the Escape key press.
    * Closes dropdowns if open, otherwise closes the modal if no success toast is showing.
    */
