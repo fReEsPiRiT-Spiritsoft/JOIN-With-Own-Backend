@@ -57,6 +57,8 @@ export class App implements OnInit {
       console.warn('Firebase not reachable, reloading once...');
       sessionStorage.setItem('hasReloaded', 'true');
       setTimeout(() => location.reload(), 1000);
+    } else {
+      console.error('Firebase is loaded or already reloaded.');
     }
     this.contactService.getAllContacts().then((contacts) => {
       this.contacts = contacts;
