@@ -54,7 +54,7 @@ export class App implements OnInit {
     const isConnected = await Promise.race([healthCheckPromise, timeoutPromise]);
     
     if (!isConnected && !this.hasReloaded) {
-      console.warn('Firebase not reachable, reloading once...');
+      console.error('Firebase not reachable, reloading once...');
       sessionStorage.setItem('hasReloaded', 'true');
       setTimeout(() => location.reload(), 1000);
     } else {
