@@ -90,80 +90,108 @@ export class AddTaskModal implements OnInit {
 
   /**
    * Validates all required form fields.
-   * Checks title, due date format and validity, and category selection.
+   * Delegates validation to specific field validators.
    *
    * @returns True if all validations pass, false otherwise
    */
   validateForm(): boolean {
     let isValid = true;
 
-    if (!this.title.trim()) {
-      this.titleError = true;
-      if (this.formFieldsComponent) {
-        this.formFieldsComponent.titleError = true;
-      }
-      isValid = false;
-    } else {
-      this.titleError = false;
-      if (this.formFieldsComponent) {
-        this.formFieldsComponent.titleError = false;
-      }
-    }
-
-    if (!this.dueDate) {
-      this.dueDateError = true;
-      this.dueDateErrorMessage = 'This field is required';
-      if (this.formFieldsComponent) {
-        this.formFieldsComponent.dueDateError = true;
-        this.formFieldsComponent.dueDateErrorMessage = 'This field is required';
-      }
-      isValid = false;
-    } else {
-      const [day, month, year] = this.dueDate.split('/');
-      if (day && month && year) {
-        const selectedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        if (selectedDate < today) {
-          this.dueDateError = true;
-          this.dueDateErrorMessage = 'Date cannot be in the past';
-          if (this.formFieldsComponent) {
-            this.formFieldsComponent.dueDateError = true;
-            this.formFieldsComponent.dueDateErrorMessage = 'Date cannot be in the past';
-          }
-          isValid = false;
-        } else {
-          this.dueDateError = false;
-          if (this.formFieldsComponent) {
-            this.formFieldsComponent.dueDateError = false;
-          }
-        }
-      } else {
-        this.dueDateError = true;
-        this.dueDateErrorMessage = 'Invalid date format';
-        if (this.formFieldsComponent) {
-          this.formFieldsComponent.dueDateError = true;
-          this.formFieldsComponent.dueDateErrorMessage = 'Invalid date format';
-        }
-        isValid = false;
-      }
-    }
-
-    if (!this.category) {
-      this.categoryError = true;
-      if (this.formFieldsComponent) {
-        this.formFieldsComponent.categoryError = true;
-      }
-      isValid = false;
-    } else {
-      this.categoryError = false;
-      if (this.formFieldsComponent) {
-        this.formFieldsComponent.categoryError = false;
-      }
-    }
+    isValid = this.validateTitle() && isValid;
+    isValid = this.validateDueDate() && isValid;
+    isValid = this.validateCategory() && isValid;
 
     return isValid;
+  }
+
+  /**
+   * Validates the task title field.
+   * Updates error states in both component and form fields.
+   *
+   * @returns True if title is not empty, false otherwise
+   */
+  private validateTitle(): boolean {
+    const hasTitle = this.title.trim().length > 0;
+    this.titleError = !hasTitle;
+    if (this.formFieldsComponent) {
+      this.formFieldsComponent.titleError = !hasTitle;
+    }
+    return hasTitle;
+  }
+
+  /**
+   * Validates the due date field.
+   * Checks for presence, format, and date validity.
+   *
+   * @returns True if date is valid and formatted correctly, false otherwise
+   */
+  private validateDueDate(): boolean {
+    if (!this.dueDate) {
+      this.setDueDateError('This field is required');
+      return false;
+    }
+
+    const [day, month, year] = this.dueDate.split('/');
+    if (!day || !month || !year) {
+      this.setDueDateError('Invalid date format');
+      return false;
+    }
+
+    return this.validateDateNotInPast(parseInt(year), parseInt(month) - 1, parseInt(day));
+  }
+
+  /**
+   * Validates that the selected date is not in the past.
+   * Compares against today's date with time normalized to midnight.
+   *
+   * @param year - The year value
+   * @param month - The month value (0-indexed)
+   * @param day - The day value
+   * @returns True if date is today or in the future, false if in the past
+   */
+  private validateDateNotInPast(year: number, month: number, day: number): boolean {
+    const selectedDate = new Date(year, month, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      this.setDueDateError('Date cannot be in the past');
+      return false;
+    }
+
+    this.dueDateError = false;
+    if (this.formFieldsComponent) this.formFieldsComponent.dueDateError = false;
+    return true;
+  }
+
+  /**
+   * Sets the due date error state with a specific message.
+   * Updates error states in both component and form fields.
+   *
+   * @param message - The error message to display
+   */
+  private setDueDateError(message: string): void {
+    this.dueDateError = true;
+    this.dueDateErrorMessage = message;
+    if (this.formFieldsComponent) {
+      this.formFieldsComponent.dueDateError = true;
+      this.formFieldsComponent.dueDateErrorMessage = message;
+    }
+  }
+
+  /**
+   * Validates the category field.
+   * Updates error states in both component and form fields.
+   *
+   * @returns True if category is selected, false otherwise
+   */
+  private validateCategory(): boolean {
+    const hasCategory = !!this.category;
+    this.categoryError = !hasCategory;
+    if (this.formFieldsComponent) {
+      this.formFieldsComponent.categoryError = !hasCategory;
+    }
+    return hasCategory;
   }
 
   /**
@@ -175,11 +203,32 @@ export class AddTaskModal implements OnInit {
       return;
     }
 
+    const dueDateTimestamp = this.convertDueDateToTimestamp();
+    const newTask = this.createTaskObject(dueDateTimestamp);
+
+    this.taskCreated.emit(newTask);
+    this.displaySuccessAndClose();
+  }
+
+  /**
+   * Converts the due date string to a Firestore Timestamp.
+   *
+   * @returns The Firestore Timestamp for the due date
+   */
+  private convertDueDateToTimestamp(): Timestamp {
     const [day, month, year] = this.dueDate.split('/');
     const dateObject = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-    const dueDateTimestamp = Timestamp.fromDate(dateObject);
+    return Timestamp.fromDate(dateObject);
+  }
 
-    const newTask: Omit<Task, 'id' | 'createdAt'> = {
+  /**
+   * Creates the task object with all form data.
+   *
+   * @param dueDateTimestamp - The due date as a Firestore Timestamp
+   * @returns The task object ready for creation
+   */
+  private createTaskObject(dueDateTimestamp: Timestamp): Omit<Task, 'id' | 'createdAt'> {
+    return {
       title: this.title.trim(),
       description: this.description.trim(),
       dueDate: dueDateTimestamp,
@@ -189,8 +238,12 @@ export class AddTaskModal implements OnInit {
       assignedTo: [...this.selectedContactIds],
       subtasks: this.subtasks,
     };
+  }
 
-    this.taskCreated.emit(newTask);
+  /**
+   * Displays success toast and closes modal after delay.
+   */
+  private displaySuccessAndClose(): void {
     this.showSuccessToast = true;
 
     setTimeout(() => {
@@ -204,6 +257,14 @@ export class AddTaskModal implements OnInit {
    * Resets all form fields and error states to their default values.
    */
   resetForm() {
+    this.resetFormFields();
+    this.resetErrorStates();
+  }
+
+  /**
+   * Resets all form field values to their defaults.
+   */
+  private resetFormFields(): void {
     this.title = '';
     this.description = '';
     this.dueDate = '';
@@ -211,6 +272,12 @@ export class AddTaskModal implements OnInit {
     this.category = '';
     this.selectedContactIds = [];
     this.subtasks = [];
+  }
+
+  /**
+   * Resets all error states to their defaults.
+   */
+  private resetErrorStates(): void {
     this.titleError = false;
     this.dueDateError = false;
     this.dueDateErrorMessage = 'This field is required';
