@@ -8,6 +8,8 @@ class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        if self.action in ['retrieve', 'update', 'partial_update', 'destroy']:
+            return Task.objects.all()
         queryset = Task.objects.all()
         view_mode = self.request.query_params.get('viewMode', 'public')
         user_id = self.request.query_params.get('userId')
