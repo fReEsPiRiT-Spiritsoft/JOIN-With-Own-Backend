@@ -1,12 +1,23 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from ..models import User
 
 class RegistrationView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        user = User.objects.get(email=response.data['email'])
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({
+            'message': 'Registration successful',
+            'token': token.key,
+            'user': UserSerializer(user).data
+        }, status=status.HTTP_201_CREATED)
 
 class LoginView(APIView):
     serializer_class = LoginSerializer
@@ -19,5 +30,11 @@ class LoginView(APIView):
             password=serializer.validated_data['password']
         )
         if user:
-            return Response(UserSerializer(user).data)
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({
+                'message': 'Login successful',
+                'token': token.key,
+                'user': UserSerializer(user).data
+            }, status=status.HTTP_200_OK)
+
         return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)

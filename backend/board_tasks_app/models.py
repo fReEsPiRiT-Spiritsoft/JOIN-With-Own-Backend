@@ -1,3 +1,37 @@
 from django.db import models
 
-# Create your models here.
+class Task(models.Model):
+    STATUS_CHOICES = [
+        ('todo', 'To do'),
+        ('inprogress', 'In progress'),
+        ('awaitfeedback', 'Await feedback'),
+        ('done', 'Done'),
+    ]
+
+    PRIORITY_CHOICES = [
+        ('urgent', 'Urgent'),
+        ('medium', 'Medium'),
+        ('low', 'Low'),
+    ]
+
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, default='')
+    dueDate = models.CharField(max_length=50)  # ISO string
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES)
+    category = models.CharField(max_length=100)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='todo')
+
+    assignedTo = models.JSONField(default=list)   # array of userIds
+    subtasks = models.JSONField(default=list)     # [{id,title,completed}]
+
+    createdAt = models.CharField(max_length=50)
+    updatedAt = models.CharField(max_length=50, blank=True, null=True)
+
+    order = models.IntegerField(blank=True, null=True)
+    isPrivate = models.BooleanField(default=False)
+    ownerId = models.CharField(max_length=100, blank=True, null=True)
+
+class BoardSettings(models.Model):
+    userId = models.CharField(max_length=100, unique=True)
+    viewMode = models.CharField(max_length=10, default='public')
+    lastChanged = models.CharField(max_length=50, blank=True, null=True)

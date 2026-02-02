@@ -15,28 +15,24 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['name', 'email', 'password', 'confirmPassword', 'acceptPrivacyPolicy']
-        extra_kwargs = {
-            'password': {'write_only': True}
-        }
+        extra_kwargs = {'password': {'write_only': True}}
 
     def validate(self, data):
         if data['password'] != data['confirmPassword']:
-            raise serializers.ValidationError("Passwords do not Match")
-        if not data.get('acceptPrivacyPolicy'):
-            raise serializers.ValidationError("Privacy Policy must be accepted")
+            raise serializers.ValidationError('Passwords do not match')
+        if not data['acceptPrivacyPolicy']:
+            raise serializers.ValidationError('Privacy policy must be accepted')
         return data
-    
 
-    def create(seld, validated_data):
-        validated_data.pop('confirmPassword')
-        validated_data.pop('acceptPrivacyPolicy')
-        user = User.objects.create_user(
-            email=validated_data['email'],
-            name=validated_data['name'],
-            password=validated_data['password']
-        )
+    def create(self, validated_data):
+        validated_data.pop('confirmPassword', None)
+        validated_data.pop('acceptPrivacyPolicy', None)
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
         return user
-    
+
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    password = serializers.CharField()
+    password = serializers.CharField(write_only=True)
