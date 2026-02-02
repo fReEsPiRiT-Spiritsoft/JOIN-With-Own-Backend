@@ -1,0 +1,16 @@
+.priority-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  &__img {
+    display: block;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 400;
+  }
+}

@@ -1,0 +1,60 @@
+@if (showContactDropdown) {
+<div class="dropdown-backdrop" (click)="closeDropdown()"></div>
+}
+
+<div class="form-field" [class.has-selected-contacts]="selectedContactIds.length > 0">
+    <label for="assignedTo">Assigned to</label>
+    <div class="dropdown-wrapper">
+        <div class="dropdown-toggle-input">
+            <input type="text" id="assignedTo" [(ngModel)]="contactSearchTerm" name="contactSearch"
+                (focus)="onContactInputFocus()" (blur)="onContactInputBlur()" (input)="onContactSearch()"
+                autocomplete="off" />
+            <img #contactArrow
+                [src]="showContactDropdown ? 'assets/board/arrow-drop-up-transparent.png' : 'assets/board/arrow-drop-down-transparent.png'"
+                alt="dropdown arrow" class="dropdown-arrow" (click)="toggleContactDropdown()"
+                (mouseenter)="onArrowHover(contactArrow, showContactDropdown)"
+                (mouseleave)="onArrowLeave(contactArrow, showContactDropdown)" />
+        </div>
+
+        @if (showContactDropdown) {
+        <div class="dropdown-menu contacts-dropdown">
+            @for (contact of filteredContacts; track contact.id) {
+            <div class="contact-item" [class.selected]="isContactSelected(contact.id!)"
+                (click)="toggleContact(contact.id!, $event)">
+                <div class="contact-info">
+                    <div class="avatar" [style.background-color]="getAvatarColor(contact)">
+                        {{ getInitials(contact) }}
+                    </div>
+                    <span>{{ contact.firstname }}</span>
+                </div>
+                <img [src]="isContactSelected(contact.id!) ? 'assets/check-box/checkbox-white.png' : 'assets/board/check-button.png'"
+                    class="contact-checkbox" alt="checkbox">
+            </div>
+            }
+            @if (filteredContacts.length === 0) {
+            <div class="no-results">
+                No contacts found
+            </div>
+            }
+        </div>
+        }
+
+        <div class="selected-contacts-container">
+            @if (selectedContactIds.length > 0) {
+            <div class="selected-contacts">
+                @for (contact of getSelectedContacts().slice(0, 4); track contact.id) {
+                <div class="avatar small" [style.background-color]="getAvatarColor(contact)"
+                    [title]="contact.firstname">
+                    {{ getInitials(contact) }}
+                </div>
+                }
+                @if (selectedContactIds.length > 4) {
+                <div class="avatar small more-contacts">
+                    +{{ selectedContactIds.length - 4 }}
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+@use 'header';
+@use 'details';
+@use 'avatar';
+@use 'responsive';
+.contact-details-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  overflow: hidden;
+}
+
+
