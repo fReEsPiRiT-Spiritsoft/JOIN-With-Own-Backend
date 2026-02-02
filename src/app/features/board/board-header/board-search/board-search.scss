@@ -1,0 +1,141 @@
+.search-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.error-container {
+  min-height: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+
+.error-text {
+  color: #ff4646;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 4px;
+  width: 312px;
+  height: 48px;
+  background: #ffffff;
+  border: 1px solid #a8a8a8;
+  border-radius: 10px;
+  transition: border-color 0.3s ease;
+
+  &.error {
+    border-color: #ff4646;
+
+    .search-input {
+      color: #ff4646;
+
+      &::placeholder {
+        color: rgba(255, 70, 70, 0.5);
+      }
+    }
+  }
+
+  &:focus-within {
+    border-color: #29abe2;
+  }
+
+  &.error:focus-within {
+    border-color: #ff4646;
+    box-shadow: 0 0 0 2px rgba(255, 70, 70, 0.1);
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+    height: 32px;
+    padding: 0;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 120%;
+    color: #2a3647;
+    background-color: transparent;
+    outline: none;
+
+    &::placeholder {
+      color: #d1d1d1;
+      font-weight: 400;
+    }
+  }
+
+  .search-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .search-divider {
+    width: 0px;
+    height: 24px;
+    border-left: 1px solid #d1d1d1;
+    flex-shrink: 0;
+  }
+
+  .search-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+
+    img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .search-container {
+    width: 100%;
+    max-width: 444px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-container {
+    width: 100%; 
+  }
+}

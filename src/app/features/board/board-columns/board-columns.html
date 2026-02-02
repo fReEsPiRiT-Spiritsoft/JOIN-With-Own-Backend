@@ -1,0 +1,51 @@
+<div class="board-column">
+    <div class="column-header">
+        <h2>{{ title }}</h2>
+        @if (showAddButton) {
+        <button class="add-task-btn" aria-label="Add task" (click)="onAddTaskClick()" (mouseenter)="isHovering = true"
+            (mouseleave)="isHovering = false">
+            <img [src]="addTaskIcon" alt="Add task" class="add-task-icon" />
+        </button>
+        }
+    </div>
+
+    <div class="tasks-container" cdkDropList [cdkDropListData]="tasks" [id]="columnId" [cdkDropListDisabled]="isMobile"
+        [cdkDropListConnectedTo]="isMobile ? [] : ['todo', 'inprogress', 'awaitfeedback', 'done']"
+        (cdkDropListDropped)="onDrop($event)">
+        @if (tasks.length === 0) {
+        <div class="empty-state">
+            <p>No tasks {{ title }}</p>
+        </div>
+        } @else {
+        @for (task of tasks; track task.id) {
+        <div cdkDrag [cdkDragData]="task" [cdkDragDisabled]="isMobile" class="task-wrapper">
+            <app-task-card [task]="task" (cardClicked)="onTaskClick($event)"
+                (subtaskToggled)="onSubtaskToggled($event)">
+            </app-task-card>
+
+            @if (isMobile) {
+            <button class="mobile-move-btn" [class.open]="showMoveMenu[task.id!]"
+                (click)="toggleMoveMenu(task.id!, $event)">
+                <img src="assets/board/switch-categorie.png" alt="Move task" class="dropdown-arrow" />
+            </button>
+
+            @if (showMoveMenu[task.id!]) {
+            <div class="move-menu">
+                <div class="move-menu-header">Move to</div>
+                <div class="move-menu-buttons">
+                    @for (option of getMoveOptions(columnId); track option.id) {
+                    <button class="move-menu-button" (click)="moveTaskToColumn(task, option.id, $event)">
+                        <img [src]="option.direction === 'up' ? 'assets/board/arrow_upward.png' : 'assets/board/arrow_downward.png'"
+                            [alt]="option.direction === 'up' ? 'Move up' : 'Move down'" class="arrow-icon">
+                        <span class="move-label">{{ option.label }}</span>
+                    </button>
+                    }
+                </div>
+            </div>
+            }
+            }
+        </div>
+        }
+        }
+    </div>
+</div>

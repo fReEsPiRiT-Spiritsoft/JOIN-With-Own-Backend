@@ -1,0 +1,43 @@
+<header class="header">
+    <div class="header-content">
+        <img src="assets/header-join-icon.png" alt="Join" class="header-logo mobile-only" />
+        <h1 class="header-title desktop-only">Kanban Project Management Tool</h1>
+        <div class="header-actions">
+            
+            @if (isLoggedIn) {
+            <button class="help-btn desktop-only" aria-label="Help" (click)="navigateToHelp()">
+                <img src="assets/help-icon.png" alt="Help" class="help-icon">
+            </button>
+            }
+            
+            @if (isLoggedIn) {
+            <div class="user-menu">
+                <div class="user-avatar" (click)="toggleDropdown()" [attr.aria-label]="userName">
+                    <span class="avatar-text">{{ userInitials }}</span>
+                </div>
+
+                @if (showDropdown) {
+                <div class="dropdown-menu">
+                    <button class="dropdown-item mobile-only" (click)="navigateToHelp()">
+                        Help
+                    </button>
+                    <button class="dropdown-item" (click)="navigateToLegalNotice()">
+                        Legal Notice
+                    </button>
+                    <button class="dropdown-item" (click)="navigateToPrivacyPolicy()">
+                        Privacy Policy
+                    </button>
+                    <button class="dropdown-item" (click)="logout()">
+                        Log out
+                    </button>
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </div>
+
+    @if (showDropdown) {
+    <div class="dropdown-overlay" (click)="closeDropdown()"></div>
+    }
+</header>

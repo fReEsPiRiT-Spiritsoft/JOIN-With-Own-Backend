@@ -1,0 +1,77 @@
+<div class="form-columns-wrapper">
+    <div class="form-left">
+        <div class="form-group">
+            <label>Title<span class="required">*</span></label>
+            <div class="input-wrapper">
+                <input type="text" [(ngModel)]="title" name="title" placeholder="Enter a title"
+                    [class.error]="titleError" (input)="onTitleInput()" maxlength="50" required />
+                <span class="field-error" [class.visible]="titleError">This field is required</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+            <textarea [(ngModel)]="description" name="description" placeholder="Enter a Description" rows="4"
+                maxlength="100" (ngModelChange)="onDescriptionChange()"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Due date<span class="required">*</span></label>
+            <div class="input-wrapper">
+                <div class="date-input-container">
+                    <input type="text" [(ngModel)]="dueDate" name="dueDate" placeholder="dd/mm/yyyy"
+                        [class.error]="dueDateError" (input)="formatDateInput($event)" (change)="onDateChange()"
+                        maxlength="10" pattern="[0-9\/]*" inputmode="numeric" required />
+                    <button type="button" class="calendar-icon-btn" (click)="openDatePicker()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M19 4H18V2H16V4H8V2H6V4H5C3.89 4 3 4.9 3 6V20C3 21.1 3.89 22 5 22H19C20.1 22 21 21.1 21 20V6C21 4.9 20.1 4 19 4ZM19 20H5V10H19V20ZM19 8H5V6H19V8Z"
+                                fill="#2A3647" />
+                        </svg>
+                    </button>
+                    <input type="date" class="hidden-date-picker" [(ngModel)]="hiddenDateValue" name="hiddenDate"
+                        (change)="onDatePickerChange($event)" [min]="minDate" #datePicker />
+                </div>
+                <span class="field-error" [class.visible]="dueDateError">{{ dueDateErrorMessage }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-right">
+        <app-priority-selector [(priority)]="priority"></app-priority-selector>
+
+        <app-contact-assignment-dropdown [contacts]="contacts" [selectedContactIds]="selectedContactIds"
+            (selectedContactIdsChange)="onSelectedContactIdsChange($event)">
+        </app-contact-assignment-dropdown>
+
+        <div class="form-group">
+            <label>Category<span class="required">*</span></label>
+            <div class="input-wrapper">
+                <div class="dropdown-wrapper">
+                    <div class="dropdown-toggle" (click)="toggleCategoryDropdown()" [class.error]="categoryError">
+                        <span>{{ category || 'Select task category' }}</span>
+                        <img #categoryArrow
+                            [src]="showCategoryDropdown ? 'assets/board/arrow-drop-up-transparent.png' : 'assets/board/arrow-drop-down-transparent.png'"
+                            alt="dropdown arrow" class="dropdown-arrow"
+                            (mouseenter)="onArrowHover(categoryArrow, showCategoryDropdown)"
+                            (mouseleave)="onArrowLeave(categoryArrow, showCategoryDropdown)" />
+                    </div>
+
+                    @if (showCategoryDropdown) {
+                    <div class="dropdown-menu">
+                        @for (cat of categories; track cat) {
+                        <div class="dropdown-item" (click)="selectCategory(cat)">
+                            {{ cat }}
+                        </div>
+                        }
+                    </div>
+                    }
+                </div>
+                <span class="field-error" [class.visible]="categoryError">This field is required</span>
+            </div>
+        </div>
+
+        <app-subtask-manager [subtasks]="subtasks" (subtasksChange)="onSubtasksChange($event)">
+        </app-subtask-manager>
+    </div>
+</div>

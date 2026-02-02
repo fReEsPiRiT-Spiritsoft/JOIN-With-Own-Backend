@@ -1,0 +1,24 @@
+<div class="board-container">
+
+    <app-board-header [searchError]="searchError" (addTaskClick)="openAddTaskModal('todo')"
+        (searchQuery)="onSearch($event)">
+    </app-board-header>
+
+    <div class="board-columns-wrapper">
+        @for (column of columns; track column.id) {
+        <app-board-columns [title]="column.title" [tasks]="column.tasks" [columnId]="column.id"
+            [showAddButton]="column.id !== 'done'" (addTaskClicked)="openAddTaskModal($event)"
+            (taskClicked)="openViewTaskModal($event)" (subtaskToggled)="onSubtaskToggled($event)"
+            (moveTaskRequested)="onMoveTaskRequested($event)">
+        </app-board-columns>
+        }
+    </div>
+
+    <app-add-task-modal [showModal]="showAddTaskModal" [defaultStatus]="defaultStatus"
+        (closeModal)="closeAddTaskModal()" (taskCreated)="handleTaskCreated($event)">
+    </app-add-task-modal>
+
+    <app-task-card-modal [showModal]="showViewTaskModal" [task]="selectedTask" (closeModal)="closeViewTaskModal()"
+        (editTask)="handleEditTask($event)" (deleteTask)="handleDeleteTask($event)">
+    </app-task-card-modal>
+</div>

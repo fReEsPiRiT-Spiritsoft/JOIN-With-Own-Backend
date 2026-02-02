@@ -1,0 +1,7 @@
+<div class="priority-icon">
+    <img [src]="priorityConfig.icon" [alt]="priorityConfig.label" class="priority-icon__img" width="32" height="32" />
+
+    @if (showLabel) {
+    <span class="priority-icon__label">{{ priorityConfig.label }}</span>
+    }
+</div>

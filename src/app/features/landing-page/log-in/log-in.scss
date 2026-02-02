@@ -1,0 +1,362 @@
+.login-wrapper {
+  max-width: 1920px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+}
+
+.login-container {
+  width: 100%;
+  min-height: 70dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  @media (max-height: 800px) {
+    min-height: 65dvh;
+    margin-top: 10px;
+  }
+}
+
+.header-actions {
+  position: fixed;
+  top: 40px;
+  right: calc(50% - 960px + 80px);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  z-index: 20;
+
+  @media (max-width: 2080px) {
+    right: 80px;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+
+  .not-user-text {
+    font-size: 16px;
+    color: #2a3647;
+  }
+
+  .signup-btn {
+    background-color: #2a3647;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #29abe2;
+    }
+  }
+}
+
+.header-actions-mobile {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(12px, 4vw, 20px);
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  @media (max-height: 800px) {
+    margin-top: 10px;
+  }
+
+  .not-user-text {
+    font-size: clamp(14px, 3.5vw, 16px);
+    color: #2a3647;
+  }
+
+  .signup-btn {
+    background-color: #2a3647;
+    color: white;
+    border: none;
+    padding: clamp(8px, 2.5vw, 12px) clamp(16px, 5vw, 24px);
+    border-radius: 8px;
+    font-size: clamp(14px, 3.5vw, 16px);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #29abe2;
+    }
+  }
+}
+
+.login-card {
+  background: #ffffff;
+  border-radius: 30px;
+  padding: 48px 115px;
+  box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.04);
+  width: 652px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    padding: clamp(20px, 8vw, 32px) clamp(12px, 3vw, 16px);
+    width: clamp(320px, 92vw, 396px);
+    min-height: auto;
+    gap: clamp(20px, 8vw, 32px);
+    margin: 0 16px;
+  }
+
+  @media (max-height: 800px) {
+    padding: 20px 40px;
+    gap: 10px;
+  }
+
+  h1 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 61px;
+    line-height: 120%;
+    text-align: center;
+    color: #000000;
+    margin: 0;
+
+    @media (max-width: 768px) {
+      font-size: clamp(32px, 11vw, 47px);
+    }
+
+    @media (max-height: 800px) {
+      font-size: 36px;
+    }
+  }
+
+  .underline {
+    width: 150px;
+    height: 3px;
+    background-color: #29abe2;
+    border-radius: 2px;
+    margin: 0 0 16px 0;
+
+    @media (max-width: 768px) {
+      width: clamp(60px, 20vw, 88px);
+    }
+
+    @media (max-height: 800px) {
+      margin: 0 0 6px 0;
+    }
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  @media (max-height: 800px) {
+    gap: 12px;
+  }
+}
+
+.input-group {
+  position: relative;
+  width: 422px;
+  margin-bottom: 8px;
+
+  @media (max-width: 768px) {
+    width: clamp(280px, 85vw, 364px);
+    max-width: 100%;
+  }
+
+  .form-input {
+    width: 100%;
+    height: 48px;
+    padding: 12px 21px;
+    background: #ffffff;
+    border: 1px solid #d1d1d1;
+    border-radius: 10px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(16px, 4.5vw, 20px);
+    line-height: 120%;
+    color: #000000;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: #d1d1d1;
+    }
+
+    &:focus {
+      border-color: #29abe2;
+    }
+
+    &.error {
+      border-color: #e60026;
+      background-color: #ffffff;
+    }
+  }
+
+  .input-icon {
+    position: absolute;
+    right: 21px;
+    top: 12px;
+    transform: translateY(0);
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+
+    &.input-icon-clickable {
+      pointer-events: auto;
+      cursor: pointer;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .error-message {
+    min-height: 20px;
+    margin-top: 4px;
+    padding-left: 4px;
+
+    span {
+      font-family: 'Inter';
+      font-size: 16px;
+      font-weight: 400;
+      color: #e60026;
+      display: block;
+      animation: fadeIn 0.2s ease-in;
+    }
+  }
+}
+
+.general-error {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border: 1px solid #e60026;
+  border-radius: 8px;
+  color: #e60026;
+  font-family: 'Inter';
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in;
+  margin-bottom: 16px;
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  width: 100%;
+  margin-top: 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: clamp(14px, 5vw, 21px);
+    width: clamp(140px, 42vw, 180px);
+  }
+
+  @media (max-height: 800px) {
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  button {
+    height: 48px;
+    padding: 15px 24px;
+    border-radius: 8px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 21px;
+    line-height: 120%;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:disabled {
+      opacity: 0.6;
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: clamp(44px, 12vw, 51px);
+      padding: 4px 0px;
+      font-size: clamp(14px, 3.7vw, 16px);
+    }
+
+    @media (max-height: 800px) {
+      height: 40px;
+      padding: 10px 16px;
+      font-size: 16px;
+    }
+  }
+
+  .btn-primary {
+    width: 110px;
+    background-color: #2a3647;
+    color: #ffffff;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: #29abe2;
+    }
+  }
+
+  .btn-secondary {
+    width: 177px;
+    background-color: #ffffff;
+    color: #2a3647;
+    border: 1px solid #2a3647;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: #2a3647;
+      color: white;
+    }
+  }
+}

@@ -1,0 +1,47 @@
+<div class="task-card" (click)="onCardClick()">
+    <div class="category-badge" [style.background-color]="getCategoryColor()">
+        {{ task.category }}
+    </div>
+    <div class="task-content">
+        <h3 class="task-title">{{ task.title }}</h3>
+        <p class="task-description">{{ task.description }}</p>
+    </div>
+    @if (task.subtasks && task.subtasks.length > 0) {
+    <div class="subtasks-section" (click)="$event.stopPropagation()">
+
+        <div class="subtasks-progress" (click)="toggleSubtasks(); $event.stopPropagation()">
+            <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+            </div>
+            <span class="progress-text">{{ completedSubtasks }}/{{ task.subtasks.length }} Subtasks</span>
+        </div>
+
+        @if (showSubtasks) {
+        <div class="subtasks-list">
+            @for (subtask of task.subtasks; track subtask.id) {
+            <div class="subtask-item" (click)="toggleSubtaskCompletion(subtask); $event.stopPropagation()">
+                <img [src]="subtask.completed ? 'assets/board/check-button-2.png' : 'assets/board/check-button.png'"
+                    class="subtask-checkbox" alt="checkbox">
+                <span class="subtask-title" [class.completed]="subtask.completed">{{ subtask.title }}</span>
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+    <div class="task-footer">
+        <div class="assigned-users">
+            @for (contact of assignedContacts; track contact.id; let i = $index) {
+            @if (i < 3) { <div class="avatar" [style.background-color]="getAvatarColor(contact)"
+                [title]="contact.firstname">
+                {{ getInitials(contact) }}
+        </div>
+        }
+        }
+        @if (assignedContacts.length > 3) {
+        <div class="avatar more-users">+{{ assignedContacts.length - 3 }}</div>
+        }
+    </div>
+    <app-priority-icon [priority]="task.priority"></app-priority-icon>
+</div>
+</div>
