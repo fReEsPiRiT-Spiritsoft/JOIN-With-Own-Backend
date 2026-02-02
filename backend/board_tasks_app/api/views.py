@@ -14,7 +14,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
         if view_mode == 'private' and user_id:
             return queryset.filter(isPrivate=True, ownerId=user_id)
-        if view_mode == 'public' and user_id:
+        if view_mode == 'public':
             return queryset.filter(isPrivate=False)
 
         return queryset
