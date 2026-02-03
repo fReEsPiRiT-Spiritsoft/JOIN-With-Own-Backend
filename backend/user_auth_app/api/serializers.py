@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from ..models import User
+from contacts_app.models import Contact
 
 class UserSerializer(serializers.ModelSerializer):
     createdAt = serializers.DateTimeField(source='created_at', read_only=True)
@@ -31,6 +32,15 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User(**validated_data)
         user.set_password(password)
         user.save()
+        name_parts = (user.name or '').strip().split(' ', 1)
+        firstname = name_parts[0] if name_parts else ''
+        lastname = name_parts[1] if len(name_parts) > 1 else ''
+        Contact.objects.create(
+            firstname=firstname,
+            lastname=lastname,
+            email=user.email,
+            phone=''
+        )
         return user
 
 class LoginSerializer(serializers.Serializer):
