@@ -16,13 +16,13 @@ class Task(models.Model):
 
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, default='')
-    dueDate = models.CharField(max_length=50)  # ISO string
+    dueDate = models.CharField(max_length=50) 
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES)
     category = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='todo')
 
-    assignedTo = models.JSONField(default=list)   # array of userIds
-    subtasks = models.JSONField(default=list)     # [{id,title,completed}]
+    assignedTo = models.JSONField(default=list) 
+    subtasks = models.JSONField(default=list)  
 
     createdAt = models.CharField(max_length=50)
     updatedAt = models.CharField(max_length=50, blank=True, null=True)
