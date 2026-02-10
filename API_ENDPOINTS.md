@@ -1,4 +1,4 @@
-# Kanmind API Endpoint Documentation
+# JOIN API Endpoint Documentation
 
 Basis-URL: http://<host>/api
 
