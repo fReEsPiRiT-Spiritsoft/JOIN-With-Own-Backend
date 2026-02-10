@@ -2,6 +2,14 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 class UserManager(BaseUserManager):
+    """
+    UserManager
+    Custom manager for User model.
+
+    Methods:
+    - create_user: Creates and saves a regular user with the given email, name, and password.
+    - create_superuser: Creates and saves a superuser with the given email, name, and password.
+    """
     def create_user(self, email, name, password=None, **extra_fields):
         if not email:
             raise ValueError('E-Mail-Adresse ist erforderlich')
@@ -17,6 +25,13 @@ class UserManager(BaseUserManager):
         return self.create_user(self, email, name, password=None, **extra_fields)
     
 class User(AbstractBaseUser, PermissionsMixin):
+    """
+    User model.
+    Custom user model for authentication.
+    Authentication:
+    - USERNAME_FIELD is set to 'email'.
+    - REQUIRED_FIELDS includes 'name'.
+    """
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)

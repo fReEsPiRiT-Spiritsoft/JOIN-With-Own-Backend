@@ -3,6 +3,8 @@ from ..models import User
 from contacts_app.models import Contact
 
 class UserSerializer(serializers.ModelSerializer):
+    """UserSerializer
+    Serializes and deserializes User instances for API requests and responses."""
     createdAt = serializers.DateTimeField(source='created_at', read_only=True)
 
     class Meta:
@@ -10,6 +12,27 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'name', 'createdAt']
 
 class RegisterSerializer(serializers.ModelSerializer):
+    """
+    RegisterSerializer
+    Handles user registration, including password confirmation and privacy policy acceptance.
+
+    Fields:
+    - name: Name of the user.
+    - email: Email address.
+    - password: User password (write-only).
+    - confirmPassword: Password confirmation (write-only).
+    - acceptPrivacyPolicy: Privacy policy acceptance (write-only).
+
+    Validation:
+    - Ensures passwords match.
+    - Ensures privacy policy is accepted.
+
+    On creation:
+    - Removes confirmPassword and acceptPrivacyPolicy from data.
+    - Sets the user's password securely.
+    - Splits name into firstname and lastname.
+    - Creates a corresponding Contact entry for the user.
+    """
     confirmPassword = serializers.CharField(write_only=True)
     acceptPrivacyPolicy = serializers.BooleanField(write_only=True)
 
@@ -44,5 +67,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class LoginSerializer(serializers.Serializer):
+    """LoginSerializer
+    Handles user login data."""
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)

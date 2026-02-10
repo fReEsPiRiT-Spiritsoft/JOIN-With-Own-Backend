@@ -7,6 +7,14 @@ from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from ..models import User
 
 class RegistrationView(generics.CreateAPIView):
+    """
+    RegistrationView
+    Handles user registration via POST request.
+
+    - Uses RegisterSerializer for validation and creation.
+    - On success, creates an authentication token for the new user.
+    - Returns a success message, token, and user data.
+    """
     serializer_class = RegisterSerializer
 
     def create(self, request, *args, **kwargs):
@@ -20,6 +28,15 @@ class RegistrationView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
 
 class LoginView(APIView):
+    """
+    LoginView
+    Handles user login via POST request.
+
+    - Uses LoginSerializer for validation.
+    - Authenticates user with provided email and password.
+    - On success, returns a token and user data.
+    - On failure, returns 401 Unauthorized with error message.
+    """
     serializer_class = LoginSerializer
 
     def post(self, request):
@@ -40,6 +57,15 @@ class LoginView(APIView):
         return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
     
 class GuestLoginView(APIView):
+    """
+    GuestLoginView
+    Handles guest login via POST request.
+
+    - Retrieves or creates a guest user with a fixed email.
+    - Sets an unusable password if the guest user is newly created.
+    - Generates or retrieves an authentication token for the guest user.
+    - Returns a success message, token, and guest user data.
+    """
     def post(self, request):
         guest_user, created = User.objects.get_or_create(
             email='guest@example.com',
