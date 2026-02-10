@@ -91,8 +91,8 @@ export class AuthService {
     }
   }
 
-  // Login über das Backend
   async login(credentials: LoginCredentials): Promise<{ success: boolean; message: string; user?: User }> {
+  try {
     const response = await firstValueFrom(
       this.http.post<any>(`${this.apiUrl}/login/`, credentials)
     );
@@ -103,7 +103,11 @@ export class AuthService {
       this.storeCurrentUser(response.user);
     }
     return { success: true, message: response.message, user: response.user };
+  } catch (error: any) {
+    const message = this.extractErrorMessage(error) || 'Invalid email or password';
+    return { success: false, message };
   }
+}
 
   loginAsGuest(): void {
     const guestUser: User = {
