@@ -4,9 +4,27 @@ from board_tasks_app.models import Task, BoardSettings
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = [
+            'title',
+            'description',
+            'dueDate',
+            'priority',
+            'category',
+            'status',
+            'assignedTo',
+            'subtasks',
+            'createdAt',
+            'updatedAt',
+            'order',
+            'isPrivate',
+            'ownerId'
+        ]
 
 class BoardSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = BoardSettings
-        fields = '__all__'
+        fields = [
+            'userId',
+            'viewMode',
+            'lastChanged'
+        ]

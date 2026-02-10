@@ -59,6 +59,7 @@ export class AddTaskFormFields implements OnInit {
   showCategoryDropdown = false;
 
   contacts: Contact[] = [];
+  isLoadingContacts = true;
   categories = ['Technical Task', 'User Story'];
 
   titleError = false;
@@ -74,6 +75,7 @@ export class AddTaskFormFields implements OnInit {
    */
   async ngOnInit() {
     await this.loadContacts();
+    this.isLoadingContacts = false;  // Neu hinzugefügt
   }
 
   /**
