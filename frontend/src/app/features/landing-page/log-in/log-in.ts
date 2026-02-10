@@ -110,12 +110,19 @@ export class LogIn {
     }
   }
 
-  onGuestLogin() {
+  async onGuestLogin() {
     this.isLoading = true;
-    const guestUser = this.createGuestUser();
-    this.storeGuestUser(guestUser);
-    this.navigateToSummaryWithDelay();
+    const result = await this.authService.loginAsGuest();
+    this.isLoading = false;
+
+  if (result.success) {
+    sessionStorage.setItem('justLoggedIn', 'true');
+    this.router.navigate(['/summary']);
+  } else {
+    this.errorMessage = result.message;
   }
+}
+
 
   private createGuestUser() {
     return {

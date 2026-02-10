@@ -109,17 +109,22 @@ export class AuthService {
   }
 }
 
-  loginAsGuest(): void {
-    const guestUser: User = {
-      id: 'guest',
-      email: 'guest@join.com',
-      name: 'Guest User',
-      password: '',
-      createdAt: new Date()
-    };
-    localStorage.setItem('currentUser', JSON.stringify(guestUser));
-    this.currentUserSubject.next(guestUser);
+  async loginAsGuest(): Promise<{ success: boolean; message: string }> {
+  try {
+    const response = await firstValueFrom(
+      this.http.post<any>(`${this.apiUrl}/guest-login/`, {})
+    );
+    if (response?.token) {
+      localStorage.setItem('token', response.token);
+    }
+    if (response?.user) {
+      this.storeCurrentUser(response.user);
+    }
+    return { success: true, message: response.message };
+  } catch (error: any) {
+    return { success: false, message: 'Guest login failed' };
   }
+}
 
   logout(): void {
     localStorage.removeItem('currentUser');

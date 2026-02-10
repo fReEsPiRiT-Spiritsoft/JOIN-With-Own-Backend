@@ -38,3 +38,20 @@ class LoginView(APIView):
             }, status=status.HTTP_200_OK)
 
         return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+class GuestLoginView(APIView):
+    def post(self, request):
+        guest_user, created = User.objects.get_or_create(
+            email='guest@example.com',
+            defaults={'name': 'Guest User'}
+        )
+        if created:
+            guest_user.set_password(None) 
+            guest_user.save()
+
+        token, _ = Token.objects.get_or_create(user=guest_user)
+        return Response({
+            'message': 'Guest login successful',
+            'token': token.key,
+            'user': UserSerializer(guest_user).data
+        }, status=status.HTTP_200_OK)
