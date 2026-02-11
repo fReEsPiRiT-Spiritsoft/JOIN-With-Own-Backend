@@ -57,10 +57,9 @@ Prerequisites: Node.js ≥ 18, Python ≥ 3.13, npm ≥ 9, Angular CLI ≥ 19
 2. python -m venv .venv
 3. source .venv/bin/activate  # Linux / macOS
 4. pip install -r requirements.txt
-5. cp .env.example .env  # edit .env as needed
-6. python manage.py migrate
-7. python manage.py createsuperuser
-8. python manage.py runserver
+5. python manage.py migrate
+6. python manage.py createsuperuser
+7. python manage.py runserver
 
 Backend runs at: http://localhost:8000
 
