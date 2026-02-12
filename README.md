@@ -56,6 +56,17 @@ Prerequisites: Node.js ≥ 18, Python ≥ 3.13, npm ≥ 9, Angular CLI ≥ 19
 1. cd backend
 2. python -m venv .venv
 3. source .venv/bin/activate  # Linux / macOS
+3a. "env/Scripts/activate" # Windows
+3b. Erstelle eine `.env`-Datei im `backend`-Verzeichnis mit folgendem Inhalt:
+
+    SECRET_KEY=dein-geheimer-django-key
+
+   Einen neuen Secret Key kannst du z.B. so generieren:
+   ```bash
+   python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+   ```
+   Kopiere den ausgegebenen Key in die `.env`-Datei.
+
 4. pip install -r requirements.txt
 5. python manage.py migrate
 6. python manage.py createsuperuser
