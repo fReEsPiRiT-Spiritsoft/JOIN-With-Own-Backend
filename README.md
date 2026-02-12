@@ -57,15 +57,15 @@ Prerequisites: Node.js ≥ 18, Python ≥ 3.13, npm ≥ 9, Angular CLI ≥ 19
 2. python -m venv .venv
 3. source .venv/bin/activate  # Linux / macOS
 3a. "env/Scripts/activate" # Windows
-3b. Erstelle eine `.env`-Datei im `backend`-Verzeichnis mit folgendem Inhalt:
+3b. Create a `.env` file in the `backend` directory with the following content:
 
-    SECRET_KEY=dein-geheimer-django-key
+    SECRET_KEY=your-secret-django-key
 
-   Einen neuen Secret Key kannst du z.B. so generieren:
+   You can generate a new secret key with:
    ```bash
    python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
    ```
-   Kopiere den ausgegebenen Key in die `.env`-Datei.
+   Copy the generated key into your `.env` file.
 
 4. pip install -r requirements.txt
 5. python manage.py migrate
